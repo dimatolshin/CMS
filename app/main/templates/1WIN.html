@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html amp lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>{{ name_of_site }}</title>
+    <link
+      rel="canonical"
+      href="https://amp.dev/ru/documentation/guides-and-tutorials/start/create/basic_markup/"
+    />
+    <meta
+      name="любой текст"
+      content="любой текст"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+     <script type="text/javascript">
+      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();
+      for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+      ym({{ yandex_metrika }}, "init", {
+           clickmap:true,
+           trackLinks:true,
+           accurateTrackBounce:true,
+           webvisor:true,
+           ecommerce:"dataLayer"
+      });
+   </script>
+
+    <meta name="viewport" content="width=device-width" />
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "NewsArticle",
+        "headline": "Open-source framework for publishing content",
+        "datePublished": "2015-10-07T12:02:41Z",
+        "image": ["logo.jpg"]
+      }
+    </script>
+    <style amp-boilerplate>
+      body {
+        -webkit-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+        -moz-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+        -ms-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+        animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+      }
+      @-webkit-keyframes -amp-start {
+        from {
+          visibility: hidden;
+        }
+        to {
+          visibility: visible;
+        }
+      }
+      @-moz-keyframes -amp-start {
+        from {
+          visibility: hidden;
+        }
+        to {
+          visibility: visible;
+        }
+      }
+      @-ms-keyframes -amp-start {
+        from {
+          visibility: hidden;
+        }
+        to {
+          visibility: visible;
+        }
+      }
+      @-o-keyframes -amp-start {
+        from {
+          visibility: hidden;
+        }
+        to {
+          visibility: visible;
+        }
+      }
+      @keyframes -amp-start {
+        from {
+          visibility: hidden;
+        }
+        to {
+          visibility: visible;
+        }
+      }
+    </style>
+    <noscript
+      ><style amp-boilerplate>
+        body {
+          -webkit-animation: none;
+          -moz-animation: none;
+          -ms-animation: none;
+          animation: none;
+        }
+      </style>
+    </noscript>
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+  </head>
+  <body>
+     <noscript>
+          <div>
+            <img
+              src="https://mc.yandex.ru/watch/98990777"
+              style=' position: absolute, left: -9999px '
+              alt=""
+            />
+          </div>
+        </noscript>
+
+    <header class="header">
+      <div class="container-fluid">
+        <a class="logo" href="{{site.main_link}}">
+          <picture>
+            <source
+              srcset="http://127.0.0.1:8000/media/header(2).png"
+              media="(max-width: 1200px)"
+            />
+            <img
+              src="http://127.0.0.1:8000/media/header(1).png"
+              alt="шапка сайта 1win"
+            />
+          </picture>
+        </a>
+        <div class="mobile">
+          <amp-img
+            width="105"
+            height="53"
+            layout="intrinsic"
+            src="http://127.0.0.1:8000/media/logo.png"
+            alt="logo"
+          ></amp-img>
+          <div class="mobile__inner">
+            <a class="mobile__inner__link mobile__inner__link--green" href="#"
+              >Регистрация</a
+            >
+            <a class="mobile__inner__link" href="#">Вход</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="hero">
+        <div class="hero__block">
+          <h1 id="hero__title">{{ site.title }}</h1>
+          <div id="hero__descr">
+            {{ site.description | safe }}
+          </div>
+          {% if site.title_button and site.link_for_site %}
+            <a class="link" id="hero__link" href="{{ link_for_site }}">{{ site.title_button }}</a>
+          {% endif %}
+          <span id="hero__info">Промокод скопируется автоматически!</span>
+        </div>
+      </section>
+
+      <section class="about section--offset">
+        <div class="container">
+          <div class="about__block">
+            <h2 class="about__title title">{{ site.title_1 }}</h2>
+            <div class="list-info">
+              <p class="list-info__item">
+                {{ site.description_1 | safe }}
+              </p>
+            </div>
+            <div class="figure-info">
+              <amp-img
+                width="1100"
+                height="585"
+                layout="intrinsic"
+                src="http://127.0.0.1:8000{{ site.photo_1.image_url }}"
+                alt="1win"
+              ></amp-img>
+              {% if button_1 and link_for_site_1 %}
+               <a class="link" href="{{ site.link_for_site_1 }}">{{ site.button_1 }}</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="registration section--offset">
+        <div class="container">
+          <div class="registration__block">
+            <h2 class="registration__title title">{{ site.title_2 }}</h2>
+            <div class="list-info">
+              {{ site.description_2 | safe }}
+            </div>
+          </div>
+          <div class="figure-info">
+            <amp-img
+              width="1100"
+              height="585"
+              layout="intrinsic"
+              src="http://127.0.0.1:8000{{ site.photo_about_2.image_url }}"
+              alt="1win"
+            ></amp-img>
+            {% if site.button_2 and site.link_for_site_2 %}
+              <a class="link" href="{{ site.link_for_site_2 }}">{{ site.button_2 }}</a>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+
+      <section class="mirror section--offset">
+        <div class="container">
+          <div class="mirror__block">
+            <h2 class="mirror__title title">{{ site.title_3 }}</h2>
+            <div class="list-info">
+              {{ site.description_3 | safe }}
+            </div>
+            <div class="figure-info">
+              <amp-img
+                width="1100"
+                height="585"
+                layout="intrinsic"
+                src="http://127.0.0.1:8000{{ site.photo_about_3.image_url }}"
+                alt="1win"
+              ></amp-img>
+              {% if button_3 and link_for_site_3 %}
+                <a class="link" href="{{ site.link_for_site_3 }}">{{ site.button_3 }}</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="casino section--offset">
+        <div class="container">
+          <div class="casino__block">
+            <h2 class="casino__title title">{{ site.title_4 }}</h2>
+            <div class="list-info">
+              {{ site.description_4 | safe }}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bonus section--offset">
+        <div class="container">
+          <div class="bonus__block">
+            <h2 class="casino__title title">{{ site.title_5 }}</h2>
+            <div class="list-info">
+              {{ site.description_5 | safe }}
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
