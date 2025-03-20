@@ -2,5 +2,4 @@
 app/.env
 __pycache__
 .idea/
-app/media
 app/staticfiles

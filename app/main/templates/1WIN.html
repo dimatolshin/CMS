@@ -119,11 +119,11 @@
         <a class="logo" href="{{site.main_link}}">
           <picture>
             <source
-              srcset="http://127.0.0.1:8000/media/header(2).png"
+              srcset="https://api.gang-soft.com/media/header(2).png"
               media="(max-width: 1200px)"
             />
             <img
-              src="http://127.0.0.1:8000/media/header(1).png"
+              src="https://api.gang-soft.com/media/header(1).png"
               alt="шапка сайта 1win"
             />
           </picture>
@@ -133,14 +133,14 @@
             width="105"
             height="53"
             layout="intrinsic"
-            src="http://127.0.0.1:8000/media/logo.png"
+            src="https://api.gang-soft.com/media/logo.png"
             alt="logo"
           ></amp-img>
           <div class="mobile__inner">
-            <a class="mobile__inner__link mobile__inner__link--green" href="#"
+            <a class="mobile__inner__link mobile__inner__link--green" href="{{site.main_link}}"
               >Регистрация</a
             >
-            <a class="mobile__inner__link" href="#">Вход</a>
+            <a class="mobile__inner__link" href="{{site.main_link}}">Вход</a>
           </div>
         </div>
       </div>
@@ -154,7 +154,7 @@
             {{ site.description | safe }}
           </div>
           {% if site.title_button and site.link_for_site %}
-            <a class="link" id="hero__link" href="{{ link_for_site }}">{{ site.title_button }}</a>
+            <a class="link" id="hero__link" href="{{ site.link_for_site }}">{{ site.title_button }}</a>
           {% endif %}
           <span id="hero__info">Промокод скопируется автоматически!</span>
         </div>
@@ -174,7 +174,7 @@
                 width="1100"
                 height="585"
                 layout="intrinsic"
-                src="http://127.0.0.1:8000{{ site.photo_1.image_url }}"
+                src="https://api.gang-soft.com{{ site.photo_1.image_url }}"
                 alt="1win"
               ></amp-img>
               {% if button_1 and link_for_site_1 %}
@@ -198,7 +198,7 @@
               width="1100"
               height="585"
               layout="intrinsic"
-              src="http://127.0.0.1:8000{{ site.photo_about_2.image_url }}"
+              src="https://api.gang-soft.com{{ site.photo_about_2.image_url }}"
               alt="1win"
             ></amp-img>
             {% if site.button_2 and site.link_for_site_2 %}
@@ -220,7 +220,7 @@
                 width="1100"
                 height="585"
                 layout="intrinsic"
-                src="http://127.0.0.1:8000{{ site.photo_about_3.image_url }}"
+                src="https://api.gang-soft.com{{ site.photo_about_3.image_url }}"
                 alt="1win"
               ></amp-img>
               {% if button_3 and link_for_site_3 %}

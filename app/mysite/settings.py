@@ -20,7 +20,6 @@ from corsheaders.defaults import default_headers
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -28,10 +27,15 @@ load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost','api.gang-soft.com', 'gang-soft.com']
+CORS_ALLOWED_ORIGINS = ['https://api.gang-soft.com', 'https://gang-soft.com', 'http://api.gang-soft.com',
+                        'http://gang-soft.com']
+CSRF_TRUSTED_ORIGINS = ['https://api.gang-soft.com', 'https://gang-soft.com', 'http://api.gang-soft.com',
+                        'http://gang-soft.com']
 
+CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
 
@@ -59,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -78,7 +83,7 @@ TEMPLATES = [
         },
     },
 ]
-#simple jwt
+# simple jwt
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -124,11 +129,10 @@ DATABASES = {
         'NAME': os.getenv("NAME_DB"),
         'USER': os.getenv("NAME_USER"),
         'PASSWORD': os.getenv("NAME_PASSWORD"),
-        'HOST':  os.getenv('DOCKER_DB_HOST') if os.getenv('RUNNING_IN_DOCKER') else os.getenv('DB_HOST'),
+        'HOST': os.getenv("HOST"),
         'PORT': 5432,
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -148,7 +152,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -159,7 +162,6 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 
 USE_TZ = False
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

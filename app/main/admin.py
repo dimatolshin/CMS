@@ -12,10 +12,12 @@ class PersonInline(admin.StackedInline):
 
 admin.site.unregister(User)
 
+
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     pass
     # inlines = [PersonInline]
+
 
 @admin.register(Vebmaster)
 class VebmasterAdmin(admin.ModelAdmin):
@@ -44,3 +46,13 @@ class ImageAdmin(admin.ModelAdmin):
                 obj.image_url = obj.image.url
 
         obj.save()
+
+
+@admin.register(Server)
+class ServerAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Domain)
+class DomainAdmin(admin.ModelAdmin):
+    pass

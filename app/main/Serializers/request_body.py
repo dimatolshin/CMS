@@ -34,9 +34,16 @@ class ChangeSite(serializers.Serializer):
     domain_name = serializers.CharField()
     name_of_site = serializers.CharField()
     main_link = serializers.CharField()
-    yandex_metrika = serializers.ImageField()
+    yandex_metrika = serializers.IntegerField()
 
     # Конфигурация сайта
-    id_vebmaster = serializers.IntegerField()
+    # id_vebmaster = serializers.IntegerField()
     valuable_main_domain = serializers.CharField()
     promo_code = serializers.IntegerField()
+
+
+class GetDomainData(serializers.Serializer):
+    current_domain= serializers.CharField()
+    domain_mask = serializers.CharField()
+    status = serializers.CharField()
+

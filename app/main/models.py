@@ -1,5 +1,12 @@
 from django.contrib.auth.models import User
 from django.db import models
+import pytz
+from django.utils.timezone import now
+
+
+def get_moscow_time():
+    moscow_tz = pytz.timezone("Europe/Moscow")
+    return now().astimezone(moscow_tz)
 
 
 class Person(models.Model):
@@ -17,23 +24,21 @@ class Vebmaster(models.Model):
 
 
 class Site(models.Model):
-    shablon_name = models.CharField(verbose_name='Имя Шаблона',default='1WIN')
+    shablon_name = models.CharField(verbose_name='Имя Шаблона', default='1WIN')
     title = models.CharField(default="""
     1WIN ВХОД НА&nbsp;ОФИЦИАЛЬНЫЙ САЙТ
     """)
-    description = models.TextField(verbose_name='Текст куска заголовка',default="""
-    <a id="hero__promo" href="#">1winrupromo</a> и&nbsp;получите бонус
-            <span id="hero__price">до&nbsp;50&nbsp;000 рублей</span> при
-            регистрации.
+    description = models.TextField(verbose_name='Текст куска заголовка', default="""
+     '<p> Используйте промокод: <a id="hero__promo" href="#">1winrupromo</a> и&nbsp;получите бонус <strong id="hero__price">до&nbsp;50&nbsp;000 рублей</strong> при регистрации.</p>'
     """)
-    title_button = models.CharField(verbose_name='Текст заголовка кнопки',null=True,blank=True,default="""
+    title_button = models.CharField(verbose_name='Текст заголовка кнопки', null=True, blank=True, default="""
     Перейти на 1WIN
     """)
-    link_for_site = models.CharField(verbose_name='Сслыка на заголовки продукта',null=True,blank=True)
-    title_1 = models.CharField(verbose_name='Заголовок 1',default="""
+    link_for_site = models.CharField(verbose_name='Сслыка на заголовки продукта', null=True, blank=True)
+    title_1 = models.CharField(verbose_name='Заголовок 1', default="""
      О компании
     """)
-    description_1 = models.TextField(verbose_name='Текст 1',default="""
+    description_1 = models.TextField(verbose_name='Текст 1', default="""
     <p >
                 Чтобы войти на игровой портал БК достаточно иметь доступ в
                 интернет и мобильный телефон или ПК. Игрок должен открыть
@@ -94,11 +99,12 @@ class Site(models.Model):
                 загрузится, его можно сразу же устанавливать.
               </p>
     """)
-    button_1 = models.CharField(verbose_name='Текст кнопки 1',default='Перейти на 1WIN',null=True,blank=True)
-    link_for_site_1 = models.CharField(verbose_name='Сслыка на продукт 1',null=True,blank=True)
-    photo_1 = models.ForeignKey('Image', verbose_name='Фото 1',on_delete=models.SET_NULL,related_name='+',null=True,blank=True)
-    title_2 = models.CharField(verbose_name='Заголовок 2',default='1 WIN регистрация')
-    description_2 = models.TextField(verbose_name='Текст 2',default="""
+    button_1 = models.CharField(verbose_name='Текст кнопки 1', default='Перейти на 1WIN', null=True, blank=True)
+    link_for_site_1 = models.CharField(verbose_name='Сслыка на продукт 1', null=True, blank=True)
+    photo_1 = models.ForeignKey('Image', verbose_name='Фото 1', on_delete=models.SET_NULL, related_name='+', null=True,
+                                blank=True)
+    title_2 = models.CharField(verbose_name='Заголовок 2', default='1 WIN регистрация')
+    description_2 = models.TextField(verbose_name='Текст 2', default="""
      <p >
                 В Букмекерской конторе представлено огромное количество слотов и
                 игровых автоматов. Сотни наименований ждут своего часа, и многие
@@ -167,11 +173,12 @@ class Site(models.Model):
               фрибета открывает массу игровых возможностей.
             </p>
     """)
-    photo_about_2 = models.ForeignKey('Image', verbose_name='Фото 2',on_delete=models.SET_NULL,related_name='+',null=True,blank=True)
-    button_2 = models.CharField(verbose_name='Текст кнопки 2',default='Перейти на 1WIN')
-    link_for_site_2 = models.CharField(verbose_name='Сслыка на продукт 2',null=True,blank=True)
-    title_3 = models.CharField(verbose_name='Заголовок 3',default='1 WIN зеркало')
-    description_3 = models.TextField(verbose_name='Текст 3',default="""
+    photo_about_2 = models.ForeignKey('Image', verbose_name='Фото 2', on_delete=models.SET_NULL, related_name='+',
+                                      null=True, blank=True)
+    button_2 = models.CharField(verbose_name='Текст кнопки 2', default='Перейти на 1WIN')
+    link_for_site_2 = models.CharField(verbose_name='Сслыка на продукт 2', null=True, blank=True)
+    title_3 = models.CharField(verbose_name='Заголовок 3', default='1 WIN зеркало')
+    description_3 = models.TextField(verbose_name='Текст 3', default="""
      <p>
                 1ВИН – это игровая платформа для тех, кто хочет испытать удачу в
                 самых популярных онлайн слотах и стать победителем. Рабочее
@@ -231,11 +238,12 @@ class Site(models.Model):
                 программой, удобным выводом денег и широкой линией ставок.
               </p>
     """)
-    photo_about_3 = models.ForeignKey('Image', verbose_name='Фото 3',on_delete=models.SET_NULL,related_name='+',null=True,blank=True)
-    button_3 = models.CharField(verbose_name='Текст кнопки 3',default='Перейти на 1WIN',null=True,blank=True)
-    link_for_site_3 = models.CharField(verbose_name='Сслыка на продукт 3',null=True,blank=True)
-    title_4 = models.CharField(verbose_name='Заголовок 4',default='Заголовок 4')
-    description_4 = models.TextField(verbose_name='Текст 4',default="""
+    photo_about_3 = models.ForeignKey('Image', verbose_name='Фото 3', on_delete=models.SET_NULL, related_name='+',
+                                      null=True, blank=True)
+    button_3 = models.CharField(verbose_name='Текст кнопки 3', default='Перейти на 1WIN', null=True, blank=True)
+    link_for_site_3 = models.CharField(verbose_name='Сслыка на продукт 3', null=True, blank=True)
+    title_4 = models.CharField(verbose_name='Заголовок 4', default='Заголовок 4')
+    description_4 = models.TextField(verbose_name='Текст 4', default="""
     <p>
                 Букмекерская контора 1win – это международная компания,
                 доступная для игроков из разных уголков мира. Официальный сайт
@@ -305,8 +313,8 @@ class Site(models.Model):
                 после создания личного кабинета.
               </p>
     """)
-    title_5 = models.CharField(verbose_name='Заголовок 5',default='Заголовок 5')
-    description_5 = models.TextField(verbose_name='Текст 5',default="""
+    title_5 = models.CharField(verbose_name='Заголовок 5', default='Заголовок 5')
+    description_5 = models.TextField(verbose_name='Текст 5', default="""
     <p>
                 1вин – всемирно известная букмекерская контора, которая
                 пользуется популярностью среди опытных игроков и новичков.
@@ -373,16 +381,20 @@ class Site(models.Model):
     """)
 
     # Основная инфа
-    domain_name = models.CharField(null=True, blank=True, verbose_name='Доменное имя')
+    domain_name = models.ForeignKey('Domain', on_delete=models.SET_NULL, null=True, blank=True,
+                                    related_name='site_domain')
     name_of_site = models.CharField(verbose_name='Название сайта')
-    main_link = models.CharField(null=True, blank=True, verbose_name='Основаня ссылка')
-    yandex_metrika = models.BigIntegerField(null=True, blank=True, verbose_name='Яндех Метрика')
+    main_link = models.CharField(null=True, blank=True, verbose_name='Основная ссылка на продукт казика')
+    yandex_metrika = models.CharField(null=True, blank=True, verbose_name='Яндех Метрика')
 
     # Конфигурация сайта
-    id_vebmaster = models.ForeignKey(Vebmaster, on_delete=models.SET_NULL, related_name='site_id_vebmaster', null=True,
-                                     blank=True)
-    valuable_main_domain = models.CharField(null=True, blank=True, verbose_name='Существующий владелец домена')
+    # id_vebmaster = models.ForeignKey(Vebmaster, on_delete=models.SET_NULL, related_name='site_id_vebmaster', null=True,
+    #                                  blank=True)
+    server = models.ForeignKey('Server', on_delete=models.SET_NULL, null=True, blank=True, related_name='site_server',
+                               )
     promo_code = models.CharField(null=True, blank=True, verbose_name='Промо код')
+    create_data = models.DateTimeField(default=get_moscow_time)
+    update_data = models.DateTimeField(default=get_moscow_time)
 
     def __str__(self):
         return f'id:{self.id}, domain:{self.domain_name}'
@@ -390,8 +402,40 @@ class Site(models.Model):
 
 class Image(models.Model):
     name = models.CharField(null=True, blank=True)
-    image = models.ImageField(upload_to='',null=True,blank=True)
+    image = models.ImageField(upload_to='', null=True, blank=True)
     image_url = models.CharField(null=True, blank=True)
 
     def __str__(self):
         return f'id:{self.id}, name:{self.name}'
+
+
+class Server(models.Model):
+    ip = models.CharField()
+    status = models.CharField()
+    user = models.CharField()
+    password = models.CharField()
+    skip = models.CharField(null=True, blank=True)
+    Cf_email = models.CharField(null=True, blank=True)
+    Cf_key = models.CharField(null=True, blank=True)
+    Php_mode = models.CharField(null=True, blank=True)
+    Registrar_vendor = models.CharField(null=True, blank=True)
+    Registrar_username = models.CharField(null=True, blank=True)
+    Registrar_apLKey = models.CharField(null=True, blank=True)
+    create_data = models.DateTimeField(default=get_moscow_time)
+    update_data = models.DateTimeField(default=get_moscow_time)
+
+    def __str__(self):
+        return f'id:{self.id}, ip:{self.ip}, status:{self.status}'
+
+
+class Domain(models.Model):
+    Username = models.CharField(null=True, blank=True)
+    current_domain = models.CharField()
+    domain_mask = models.CharField()
+    server = models.ForeignKey(Server, on_delete=models.SET_NULL, null=True, blank=True, related_name='domain')
+    status = models.CharField()
+    create_data = models.DateTimeField(default=get_moscow_time)
+    update_data = models.DateTimeField(default=get_moscow_time)
+
+    def __str__(self):
+        return f'id:{self.id}, current_domain:{self.current_domain}, domain_mask:{self.domain_mask}'
