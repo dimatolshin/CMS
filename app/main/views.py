@@ -12,6 +12,8 @@ from asgiref.sync import sync_to_async
 import zipfile
 import base64
 from django.core.files.base import ContentFile
+from django.core.paginator import Paginator
+import math
 
 from .Serializers import request_body, response_serializer
 from .models import *
@@ -202,7 +204,17 @@ async def take_bot_data(request):
 @api_view(["GET"])
 @site_authenticated
 async def get_all_domain(request: HttpRequest):
-    data = [await domains(item) async for item in Domain.objects.select_related('server').all()]
+    all_domain = [await domains(item) async for item in Domain.objects.select_related('server').all()]
+
+    count_domain = len(all_domain)
+    paginator = Paginator(all_domain, 6)
+    page_number = request.GET.get("page", 1)
+    paginated_all_domain = paginator.get_page(page_number)
+
+    data = {
+        "all_domain": list(paginated_all_domain.object_list),
+        "pages": math.ceil(count_domain // 6)
+    }
 
     return JsonResponse(data, safe=False, status=200)
 
@@ -221,6 +233,16 @@ async def get_all_domain(request: HttpRequest):
 async def get_all_server(request: HttpRequest):
     servers= [item async for item in Server.objects.all()]
 
-    data= response_serializer.ServerSerializer(servers,many=True).data
+    all_server= response_serializer.ServerSerializer(servers,many=True).data
+
+    count_page = len(all_server)
+    paginator = Paginator(all_server, 6)
+    page_number = request.GET.get("page", 1)
+    paginated_all_server = paginator.get_page(page_number)
+
+    data = {
+        "all_domain": list(paginated_all_server.object_list),
+        "pages": math.ceil(count_page // 6)
+    }
 
     return JsonResponse(data,safe=False, status=200)
