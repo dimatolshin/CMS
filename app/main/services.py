@@ -104,3 +104,19 @@ async def domains(item):
         'Server_id':item.server.id,
         'Status':item.status
     }
+
+async def all_servers(item):
+    return {
+        'id':item.id,
+        'ip':item.ip,
+        'status':item.status,
+        'user':item.user,
+        'password':item.password,
+        'skip':item.skip,
+        'Cf_email':item.Cf_email,
+        'Cf_key':item.Cf_key,
+        'Php_mode':item.Php_mode,
+        'Registrar_vendor':item.Registrar_vendor,
+        'Registrar_username':item.Registrar_username,
+        'Registrar_apLKey':item.Registrar_apLKey
+    }

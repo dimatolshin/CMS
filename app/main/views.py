@@ -17,7 +17,7 @@ import math
 
 from .Serializers import request_body, response_serializer
 from .models import *
-from .services import get_response_examples, site_authenticated, serverdata, domains
+from .services import *
 
 
 class LoginView(TokenObtainPairView):
@@ -231,12 +231,10 @@ async def get_all_domain(request: HttpRequest):
 @api_view(["GET"])
 @site_authenticated
 async def get_all_server(request: HttpRequest):
-    servers= [item async for item in Server.objects.all()]
+    servers= [await all_servers(item) async for item in Server.objects.all()]
 
-    all_server= response_serializer.ServerSerializer(servers,many=True).data
-
-    count_page = len(all_server)
-    paginator = Paginator(all_server, 6)
+    count_page = len(servers)
+    paginator = Paginator(servers, 6)
     page_number = request.GET.get("page", 1)
     paginated_all_server = paginator.get_page(page_number)
 
