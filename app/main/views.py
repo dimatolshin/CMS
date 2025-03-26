@@ -46,10 +46,17 @@ class LoginView(TokenObtainPairView):
         return response
 
 
+@swagger_auto_schema(
+    methods=(['GET']),
+    responses={
+        '200': get_response_examples({'Info': 'Good'}),
+    },
+    tags=['TEST'],
+)
 @api_view(["GET"])
 @site_authenticated
 async def test_point(request):
-    return JsonResponse({'Info':'Good'},status=200)
+    return JsonResponse({'Info': 'Good'}, status=200)
 
 
 @swagger_auto_schema(
@@ -229,7 +236,7 @@ async def get_all_domain(request: HttpRequest):
     methods=['GET'],
     responses={
         '404': get_response_examples({'error': True, 'Info': 'User unexist'}),
-        '200':get_response_examples(schema=response_serializer.ServerSerializer)
+        '200': get_response_examples(schema=response_serializer.ServerSerializer)
     },
     tags=['Server'],
     operation_summary='ALl server list',
@@ -237,7 +244,7 @@ async def get_all_domain(request: HttpRequest):
 @api_view(["GET"])
 @site_authenticated
 async def get_all_server(request: HttpRequest):
-    servers= [await all_servers(item) async for item in Server.objects.all()]
+    servers = [await all_servers(item) async for item in Server.objects.all()]
 
     count_page = len(servers)
     paginator = Paginator(servers, 6)
@@ -249,4 +256,4 @@ async def get_all_server(request: HttpRequest):
         "pages": math.ceil(count_page // 6)
     }
 
-    return JsonResponse(data,safe=False, status=200)
+    return JsonResponse(data, safe=False, status=200)
