@@ -128,8 +128,9 @@ async def change_shablon_data(request):
     }
 
     for field, image_field in image_fields.items():
-
-        if field in data:
+        if data[field] == 'None':
+            pass
+        elif field in data:
             image_data = data[field].split(';base64,')[1]
 
             decoded_image = base64.b64decode(image_data)
