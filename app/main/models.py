@@ -29,7 +29,7 @@ class Site(models.Model):
     1WIN ВХОД НА&nbsp;ОФИЦИАЛЬНЫЙ САЙТ
     """)
     description = models.TextField(verbose_name='Текст куска заголовка', default="""
-     '<p> Используйте промокод: <a id="hero__promo" href="#">1winrupromo</a> и&nbsp;получите бонус <strong id="hero__price">до&nbsp;50&nbsp;000 рублей</strong> при регистрации.</p>'
+     <p> Используйте промокод: <a id="hero__promo" href="#">1winrupromo</a> и&nbsp;получите бонус <strong id="hero__price">до&nbsp;50&nbsp;000 рублей</strong> при регистрации.</p>
     """)
     title_button = models.CharField(verbose_name='Текст заголовка кнопки', null=True, blank=True, default="""
     Перейти на 1WIN

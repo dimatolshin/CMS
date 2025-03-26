@@ -14,6 +14,7 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.paginator import Paginator
 import math
+from datetime import timedelta
 
 from .Serializers import request_body, response_serializer
 from .models import *
@@ -29,6 +30,7 @@ class LoginView(TokenObtainPairView):
         response.set_cookie(
             key='refresh_token',
             value=refresh_token,
+            max_age=timedelta(minutes=5),
             httponly=True,
             secure=True,  # Только для HTTPS
             samesite='Strict',  # Защита от CSRF
@@ -36,6 +38,7 @@ class LoginView(TokenObtainPairView):
         response.set_cookie(
             key='access_token',
             value=access_token,
+            max_age=timedelta(days=10),
             httponly=True,
             secure=True,  # Только для HTTPS
             samesite='Strict',  # Защита от CSRF
