@@ -46,6 +46,12 @@ class LoginView(TokenObtainPairView):
         return response
 
 
+@api_view(["GET"])
+@site_authenticated
+async def test_point(request):
+    return JsonResponse({'Info':'Good'},status=200)
+
+
 @swagger_auto_schema(
     methods=(['POST']),
     request_body=request_body.ShablonName,
