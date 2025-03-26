@@ -1,67 +1,66 @@
 services:
   db:
     image: postgres:15
-    container_name: postgres_db
-    ports:
-      - "5432:5432"
+    container_name: cms_backend-postgres
+    expose:
+      - "5432"
     environment:
       POSTGRES_USER: ${NAME_USER}
       POSTGRES_PASSWORD: ${NAME_PASSWORD}
       POSTGRES_DB: ${NAME_DB}
+      POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - /root/cms/storage/backend/postgres_data:/var/lib/postgresql/data
     env_file:
       - app/.env
     restart: always
     networks:
-      - franchise-networks
+      - network
 
   app:
     build:
       context: app
-    container_name: back-end
-    ports:
-      - "8000:8000"
+    container_name: cms_backend-app
+    expose:
+      - "8000"    
     depends_on:
       - db
     env_file:
       - app/.env
     volumes:
-      - media_data:/app/media
-      - static_data:/app/staticfiles
+      - /root/cms/storage/backend/media_data:/app/media
+      - /root/cms/storage/share/static_data:/app/staticfiles
     environment:
       RUNNING_IN_DOCKER: 'true'
       POSTGRES_USER: ${NAME_USER}
       POSTGRES_PASSWORD: ${NAME_PASSWORD}
-      POSTGRES_DB: ${NAME_DB}
+      POSTGRES_DB: ${NAME_DB} 
     restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
     networks:
-      - cms-networks
-
+      - network
 
   nginx:
     image: nginx:latest
-    container_name: nginx
+    container_name: cms_backend-nginx
+    environment:
+      VIRTUAL_HOST: 'api.gang-soft.com'
+      LETSENCRYPT_HOST: 'api.gang-soft.com'
+      LETSENCRYPT_EMAIL: 'peter@privet.link'
     volumes:
-      - ./app/nginx.conf:/etc/nginx/nginx.conf
-      - static_data:/static
-      - media_data:/media
-      - /etc/letsencrypt:/letsencrypt
-    ports:
-      - "80:80"
-      - "443:443"
+      - ./app/nginx.conf/nginx.conf:/etc/nginx/nginx.conf
+      - /root/cms/storage/share/static_data:/static
+      - /root/cms/storage/backend/media_data:/media
+    expose:
+      - "80"
     depends_on:
       - app
-      - client
     restart: always
     networks:
-      - cms-networks
-
-
-volumes:
-  media_data:
-  postgres_data:
-  static_data:
+      - network
 
 networks:
-  cms-networks:
+  network:
