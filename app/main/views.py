@@ -30,17 +30,17 @@ class LoginView(TokenObtainPairView):
         response.set_cookie(
             key='refresh_token',
             value=refresh_token,
-            max_age=timedelta(minutes=5),
-            httponly=True,
-            secure=True,  # Только для HTTPS
+            max_age=timedelta(minutes=1),
+            httponly=False,
+            secure=False,  # Только для HTTPS
             samesite='Strict',  # Защита от CSRF
         )
         response.set_cookie(
             key='access_token',
             value=access_token,
             max_age=timedelta(days=10),
-            httponly=True,
-            secure=True,  # Только для HTTPS
+            httponly=False,
+            secure=False,  # Только для HTTPS
             samesite='Strict',  # Защита от CSRF
         )
 
