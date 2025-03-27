@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 class ShablonName(serializers.Serializer):
     shablon_name=serializers.CharField()
+    server_id= serializers.IntegerField()
 
 
 class ChangeSite(serializers.Serializer):

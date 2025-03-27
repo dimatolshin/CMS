@@ -77,12 +77,19 @@ async def test_point(request):
 @site_authenticated
 async def get_shablon_data(request):
     shablon_name = request.data.get('shablon_name')
+    server_id = request.data.get('server_id')
 
     if not shablon_name:
         return JsonResponse({'Error': 'Not shablon_name'}, status=404)
-    site = await Site.objects.filter(shablon_name=shablon_name).select_related('photo_1', 'photo_about_2',
+
+    if not server_id:
+        site = await Site.objects.filter(shablon_name=shablon_name).select_related('photo_1', 'photo_about_2',
                                                                                'photo_about_3', 'domain_name',
                                                                                'server').afirst()
+    if server_id:
+        site = await Site.objects.filter(server__id=server_id).select_related('photo_1', 'photo_about_2',
+                                                                                   'photo_about_3', 'domain_name',
+                                                                                   'server').afirst()
 
     data = await serverdata(site)
 
@@ -230,7 +237,7 @@ async def get_all_domain(request: HttpRequest):
 
     data = {
         "all_domain": list(paginated_all_domain.object_list),
-        "pages": math.ceil(count_domain // 6)
+        "pages": math.ceil(count_domain / 6)
     }
 
     return JsonResponse(data, safe=False, status=200)
@@ -257,7 +264,7 @@ async def get_all_server(request: HttpRequest):
 
     data = {
         "all_domain": list(paginated_all_server.object_list),
-        "pages": math.ceil(count_page // 6)
+        "pages": math.ceil(count_page / 6)
     }
 
     return JsonResponse(data, safe=False, status=200)
