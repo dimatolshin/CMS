@@ -19,6 +19,7 @@ from datetime import timedelta
 from .Serializers import request_body, response_serializer
 from .models import *
 from .services import *
+from mysite import settings
 
 
 class LoginView(TokenObtainPairView):
@@ -137,13 +138,16 @@ async def change_shablon_data(request):
             pass
         elif field in data:
             image_data = data[field].split(';base64,')[1]
-
             decoded_image = base64.b64decode(image_data)
 
+            filename = f'{shablon_name}_{field}.webp'
+
             image = Image(name=f'{shablon_name}_{field}')
-            await sync_to_async(image.image.save)(f'{shablon_name}_{field}.webp', ContentFile(decoded_image),
-                                                  save=False)
+            await sync_to_async(image.image.save)(filename, ContentFile(decoded_image), save=False)
             await image.asave()
+
+            image.image_url = f"{settings.MEDIA_URL}{image.image.name}"
+            await image.asave(update_fields=['image_url'])
             update_fields[image_field] = image
 
     for field in fields:

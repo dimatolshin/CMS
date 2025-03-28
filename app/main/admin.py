@@ -31,7 +31,7 @@ class SiteAdmin(admin.ModelAdmin):
 
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
-    fields = ['name', 'image']
+    fields = ['name', 'image','image_url']
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
