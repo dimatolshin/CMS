@@ -30,7 +30,7 @@ class LoginView(TokenObtainPairView):
         response.set_cookie(
             key='refresh_token',
             value=refresh_token,
-            max_age=timedelta(minutes=1),
+            max_age=timedelta(days=1),
             httponly=False,
             secure=False,  # Только для HTTPS
             samesite='Strict',  # Защита от CSRF
@@ -79,8 +79,6 @@ async def get_shablon_data(request):
     shablon_name = request.data.get('shablon_name')
     server_id = request.data.get('server_id')
 
-    if not shablon_name:
-        return JsonResponse({'Error': 'Not shablon_name'}, status=404)
 
     if not server_id:
         site = await Site.objects.filter(shablon_name=shablon_name).select_related('photo_1', 'photo_about_2',
