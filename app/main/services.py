@@ -101,7 +101,7 @@ async def domains(item):
         'Username':item.Username if item.Username else None,
         'Current_domain':item.current_domain if item.current_domain else None,
         'Domain_mask':item.domain_mask if item.domain_mask else None,
-        'Server_id':item.server.id if item.server.id else item.server.id,
+        'Server_id':item.server.id if item.server.id else None,
         'Status':item.status if item.status else None
     }
 
