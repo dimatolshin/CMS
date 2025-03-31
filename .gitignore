@@ -3,3 +3,4 @@ app/.env
 __pycache__
 .idea/
 app/staticfiles
+app/static_sites

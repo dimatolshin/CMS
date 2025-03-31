@@ -15,6 +15,8 @@ from django.core.files.base import ContentFile
 from django.core.paginator import Paginator
 import math
 from datetime import timedelta
+from pathlib import Path
+import requests
 
 from .Serializers import request_body, response_serializer
 from .models import *
@@ -80,15 +82,14 @@ async def get_shablon_data(request):
     shablon_name = request.data.get('shablon_name')
     server_id = request.data.get('server_id')
 
-
     if not server_id:
         site = await Site.objects.filter(shablon_name=shablon_name).select_related('photo_1', 'photo_about_2',
-                                                                               'photo_about_3', 'domain_name',
-                                                                               'server').afirst()
-    if server_id:
-        site = await Site.objects.filter(server__id=server_id).select_related('photo_1', 'photo_about_2',
                                                                                    'photo_about_3', 'domain_name',
                                                                                    'server').afirst()
+    if server_id:
+        site = await Site.objects.filter(server__id=server_id).select_related('photo_1', 'photo_about_2',
+                                                                              'photo_about_3', 'domain_name',
+                                                                              'server').afirst()
 
     data = await serverdata(site)
 
@@ -179,10 +180,15 @@ async def change_shablon_data(request):
 
     os.makedirs(f'{shablon_name}', exist_ok=True)
 
-    with open(f'{shablon_name}/{shablon_name}.html', 'w') as f:
+    with open(f'{shablon_name}/index.html', 'w') as f:
         f.write(html_content)
 
-    zip_file_path = f'{shablon_name}.zip'
+    zip_dir = f'static_sites/{domain.current_domain}'
+    zip_file_path = f'{zip_dir}/{shablon_name}.zip'
+
+    # Создаем директорию, если она не существует
+    Path(zip_dir).mkdir(parents=True, exist_ok=True)
+
     with zipfile.ZipFile(zip_file_path, 'w') as zipf:
         for root, dirs, files in os.walk(f'{shablon_name}'):
             for file in files:
@@ -190,7 +196,26 @@ async def change_shablon_data(request):
                 arcname = os.path.relpath(file_path, start=f'{shablon_name}')
                 zipf.write(file_path, arcname=arcname)
 
-    return JsonResponse({'Info': 'Success'}, status=200)
+    base_url = "https://api.dynadot.com/api3.xml"
+    params = {
+        'key': os.getenv('DYNADOT_API_KEY'),
+        'command': 'set_dns2',
+        'domain': domain.current_domain,
+        'main_record_type0': 'a',
+        'main_record0': domain.server.ip,
+        'subdomain0': 'www',
+        'sub_record_type0': 'a',
+        'sub_record0': domain.server.ip
+    }
+
+    response = requests.get(
+        base_url,
+        params=params,
+        headers={'User-Agent': 'YourApp/1.0'}
+    )
+
+    return JsonResponse({'Info': 'Success',
+                         'status_code': response.status_code}, status=200)
 
 
 @swagger_auto_schema(
