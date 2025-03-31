@@ -97,26 +97,26 @@ async def serverdata(site):
 
 async def domains(item):
     return {
-        'id':item.id,
-        'Username':item.Username,
-        'Current_domain':item.current_domain,
-        'Domain_mask':item.domain_mask,
-        'Server_id':item.server.id,
-        'Status':item.status
+        'id':item.id if item.id else None,
+        'Username':item.Username if item.Username else None,
+        'Current_domain':item.current_domain if item.current_domain else None,
+        'Domain_mask':item.domain_mask if item.domain_mask else None,
+        'Server_id':item.server.id if item.server.id else item.server.id,
+        'Status':item.status if item.status else None
     }
 
 async def all_servers(item):
     return {
-        'id':item.id,
-        'ip':item.ip,
-        'status':item.status,
-        'user':item.user,
-        'password':item.password,
-        'skip':item.skip,
-        'Cf_email':item.Cf_email,
-        'Cf_key':item.Cf_key,
-        'Php_mode':item.Php_mode,
-        'Registrar_vendor':item.Registrar_vendor,
-        'Registrar_username':item.Registrar_username,
-        'Registrar_apLKey':item.Registrar_apLKey
+        'id':item.id if item.id else None,
+        'ip':item.ip if item.ip else None,
+        'status':item.status if item.status else None,
+        'user':item.user if item.user else None,
+        'password':item.password if item.password else None,
+        'skip':item.skip if item.skip else None,
+        'Cf_email':item.Cf_email if item.Cf_emailelse else None,
+        'Cf_key':item.Cf_key if item.Cf_keyelse else None,
+        'Php_mode':item.Php_mode if item.Php_mode else None,
+        'Registrar_vendor':item.Registrar_vendor if item.Registrar_vendor else None,
+        'Registrar_username':item.Registrar_username if item.Registrar_usernameelse else None,
+        'Registrar_apLKey':item.Registrar_apLKey if item.Registrar_apLKey else None
     }
