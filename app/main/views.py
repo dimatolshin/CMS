@@ -202,7 +202,7 @@ async def change_shablon_data(request):
         'command': 'set_dns2',
         'domain': domain.current_domain,
         'main_record_type0': 'a',
-        'main_record0': domain.server.ip,
+        'main_record0': domain.server.ip ,
         'subdomain0': 'www',
         'sub_record_type0': 'a',
         'sub_record0': domain.server.ip
@@ -215,7 +215,7 @@ async def change_shablon_data(request):
     )
 
     return JsonResponse({'Info': 'Success',
-                         'status_code': response}, status=200)
+                         'status_code': response.text}, status=200)
 
 
 @swagger_auto_schema(
