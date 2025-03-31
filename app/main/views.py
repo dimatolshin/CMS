@@ -215,7 +215,7 @@ async def change_shablon_data(request):
     )
 
     return JsonResponse({'Info': 'Success',
-                         'status_code': response.status_code}, status=200)
+                         'status_code': response}, status=200)
 
 
 @swagger_auto_schema(

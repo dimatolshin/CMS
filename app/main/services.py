@@ -60,7 +60,7 @@ async def custom_server(item):
 
 async def serverdata(site):
     return {
-        "id": site.id,
+        "id": site.id if site else None,
         "photo_1": site.photo_1.image_url,
         "photo_about_2": site.photo_about_2.image_url,
         "photo_about_3": site.photo_about_3.image_url,
