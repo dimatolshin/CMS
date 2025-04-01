@@ -177,6 +177,7 @@ async def change_shablon_data(request):
 
     domain = await Domain.objects.filter(current_domain=site.domain_name.current_domain).select_reladet('server').afirst()
     domain.server = site.server
+    domain.status = 'Активен'
     domain.server.status = 'Активен'
     domain.Username = site.name_of_site
     await domain.asave()
