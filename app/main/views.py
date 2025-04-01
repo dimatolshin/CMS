@@ -294,7 +294,7 @@ async def get_all_domain(request: HttpRequest):
 @api_view(["GET"])
 @site_authenticated
 async def get_all_server(request: HttpRequest):
-    servers = [await all_servers(item) async for item in Server.objects.all()]
+    servers = [await all_servers(item) async for item in Server.objects.order_by('id').all()]
 
     count_page = len(servers)
     paginator = Paginator(servers, 6)
