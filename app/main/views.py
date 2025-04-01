@@ -17,12 +17,16 @@ import math
 from datetime import timedelta
 from pathlib import Path
 import requests
+from dotenv import load_dotenv
+import shutil
 
 from .Serializers import request_body, response_serializer
 from .models import *
 from .services import *
 from mysite import settings
 
+
+load_dotenv()
 
 class LoginView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
@@ -173,6 +177,7 @@ async def change_shablon_data(request):
 
     domain = await Domain.objects.filter(current_domain=site.domain_name.current_domain).afirst()
     domain.server = site.server
+    domain.server.status = 'Активен'
     domain.Username = site.name_of_site
     await domain.asave()
 
@@ -183,18 +188,20 @@ async def change_shablon_data(request):
     with open(f'{shablon_name}/index.html', 'w') as f:
         f.write(html_content)
 
-    zip_dir = f'static_sites/{domain.current_domain}'
-    zip_file_path = f'{zip_dir}/{shablon_name}.zip'
+    target_dir = f'static_sites/{domain.current_domain}'
 
-    # Создаем директорию, если она не существует
-    Path(zip_dir).mkdir(parents=True, exist_ok=True)
+    Path(target_dir).mkdir(parents=True, exist_ok=True)
 
-    with zipfile.ZipFile(zip_file_path, 'w') as zipf:
-        for root, dirs, files in os.walk(f'{shablon_name}'):
-            for file in files:
-                file_path = os.path.join(root, file)
-                arcname = os.path.relpath(file_path, start=f'{shablon_name}')
-                zipf.write(file_path, arcname=arcname)
+    # Копируем все файлы из шаблона в целевую папку
+    for root, dirs, files in os.walk(f'{shablon_name}'):
+        for file in files:
+            src_path = os.path.join(root, file)
+            rel_path = os.path.relpath(src_path, start=f'{shablon_name}')
+            dst_path = os.path.join(target_dir, rel_path)
+
+            # Создаем подпапки, если их нет
+            os.makedirs(os.path.dirname(dst_path), exist_ok=True)
+            shutil.copy2(src_path, dst_path)
 
     base_url = "https://api.dynadot.com/api3.xml"
     params = {
@@ -238,7 +245,12 @@ async def take_bot_data(request):
     if not current_domain or not domain_mask or not status:
         return JsonResponse({'Error': 'Data uncorrect'}, status=404)
 
-    await Domain.objects.acreate(current_domain=current_domain, domain_mask=domain_mask,
+    domain= await Domain.objects.filter(current_domain=current_domain).afirst()
+
+    if domain:
+        await Domain.objects.filter(status=status).aupdate(status=status)
+    else:
+        await Domain.objects.acreate(Username=domain_mask,current_domain=current_domain, domain_mask=domain_mask,
                                  status=status)
 
     return JsonResponse({'Info': 'Success'}, status=200)

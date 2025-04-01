@@ -1,5 +1,5 @@
  .hero {
-  background-image: url("../../../assets/img/hero__bg.webp");
+  background-image: url("https://api.gang-soft.com/media/hero__bg.webp");
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -83,7 +83,7 @@
 }
 @media (max-width: 576px) {
   .hero {
-    background-image: url("../../../assets/img/hero__bg-576.webp");
+    background-image: url("https://api.gang-soft.com/media/hero__bg-576.webp");
   }
   .hero__block {
     padding: 204px 48px;

@@ -45,7 +45,6 @@ async def custom_domain_name(item):
         'id': item.id,
         'value': item.current_domain,
         'content': item.current_domain,
-        'disabled':False if item.status == 'Активен' else True
     }
 
 
@@ -54,16 +53,15 @@ async def custom_server(item):
         'id': item.id,
         'value': item.ip,
         'content': item.ip,
-        'disabled': False if item.status == 'Активен' else True
     }
 
 
 async def serverdata(site):
     return {
         "id": site.id if site else None,
-        "photo_1": site.photo_1.image_url,
-        "photo_about_2": site.photo_about_2.image_url,
-        "photo_about_3": site.photo_about_3.image_url,
+        "photo_1": site.photo_1.image_url if site.photo_1 else None ,
+        "photo_about_2": site.photo_about_2.image_url if site.photo_about_2 else None,
+        "photo_about_3": site.photo_about_3.image_url if site.photo_about_3 else None,
         "domain_name": [await custom_domain_name(item) async for item in Domain.objects.all()],
         "server": [await custom_server(item) async for item in Server.objects.all()],
         "shablon_name": site.shablon_name,

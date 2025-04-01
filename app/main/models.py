@@ -438,4 +438,4 @@ class Domain(models.Model):
     update_data = models.DateTimeField(default=get_moscow_time)
 
     def __str__(self):
-        return f'id:{self.id}, current_domain:{self.current_domain}, domain_mask:{self.domain_mask}'
+        return f'id:{self.id}, current_domain:{self.current_domain}, status:{self.status}'
