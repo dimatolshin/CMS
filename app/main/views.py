@@ -25,8 +25,8 @@ from .models import *
 from .services import *
 from mysite import settings
 
-
 load_dotenv()
+
 
 class LoginView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
@@ -140,7 +140,13 @@ async def change_shablon_data(request):
 
     for field, image_field in image_fields.items():
         if data[field] == 'None':
-            pass
+            if field == 'photo_1':
+                site.photo_1 = None
+            elif field == 'photo_about_2':
+                site.photo_about_2 = None
+            elif field == 'photo_about_3':
+                site.photo_about_3 = None
+            await site.asave()
         elif field in data:
             image_data = data[field].split(';base64,')[1]
             decoded_image = base64.b64decode(image_data)
@@ -175,7 +181,8 @@ async def change_shablon_data(request):
                                                                                'photo_about_3', 'domain_name',
                                                                                'server').afirst()
 
-    domain = await Domain.objects.filter(current_domain=site.domain_name.current_domain).select_reladet('server').afirst()
+    domain = await Domain.objects.filter(current_domain=site.domain_name.current_domain).select_related(
+        'server').afirst()
     domain.server = site.server
     domain.status = 'Активен'
     domain.server.status = 'Активен'
@@ -210,7 +217,7 @@ async def change_shablon_data(request):
         'command': 'set_dns2',
         'domain': domain.current_domain,
         'main_record_type0': 'a',
-        'main_record0': domain.server.ip ,
+        'main_record0': domain.server.ip,
         'subdomain0': 'www',
         'sub_record_type0': 'a',
         'sub_record0': domain.server.ip
@@ -246,13 +253,13 @@ async def take_bot_data(request):
     if not current_domain or not domain_mask or not status:
         return JsonResponse({'Error': 'Data uncorrect'}, status=404)
 
-    domain= await Domain.objects.filter(current_domain=current_domain).afirst()
+    domain = await Domain.objects.filter(current_domain=current_domain).afirst()
 
     if domain:
         await Domain.objects.filter(status=status).aupdate(status=status)
     else:
-        await Domain.objects.acreate(Username=domain_mask,current_domain=current_domain, domain_mask=domain_mask,
-                                 status=status)
+        await Domain.objects.acreate(Username=domain_mask, current_domain=current_domain, domain_mask=domain_mask,
+                                     status=status)
 
     return JsonResponse({'Info': 'Success'}, status=200)
 

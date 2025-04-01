@@ -149,9 +149,13 @@
     <main class="main">
       <section class="hero">
         <div class="hero__block">
-          <h1 id="hero__title">{{ site.title }}</h1>
+          {% if site.title %}
+            <h1 id="hero__title">{{ site.title }}</h1>
+          {% endif %}
           <div id="hero__descr">
-            {{ site.description | safe }}
+            {% if site.description != '<p><br></p>' %}
+              {{ site.description | safe }}
+            {% endif %}
           </div>
           {% if site.title_button and site.link_for_site %}
             <a class="link" id="hero__link" href="{{ site.link_for_site }}">{{ site.title_button }}</a>
@@ -163,20 +167,26 @@
       <section class="about section--offset">
         <div class="container">
           <div class="about__block">
-            <h2 class="about__title title">{{ site.title_1 }}</h2>
+            {% if site.title_1 %}
+              <h2 class="about__title title">{{ site.title_1 }}</h2>
+            {% endif %}
             <div class="list-info">
               <p class="list-info__item">
-                {{ site.description_1 | safe }}
+                {% if site.description_1 != '<p><br></p>' %}
+                  {{ site.description_1 | safe }}
+                {% endif %}
               </p>
             </div>
             <div class="figure-info">
-              <amp-img
-                width="1100"
-                height="585"
-                layout="intrinsic"
-                src="https://api.gang-soft.com{{ site.photo_1.image_url }}"
-                alt="1win"
-              ></amp-img>
+              {% if site.photo_1 %}
+                <amp-img
+                  width="1100"
+                  height="585"
+                  layout="intrinsic"
+                  src="https://api.gang-soft.com{{ site.photo_1.image_url }}"
+                  alt="1win"
+                ></amp-img>
+              {% endif %}
               {% if button_1 and link_for_site_1 %}
                <a class="link" href="{{ site.link_for_site_1 }}">{{ site.button_1 }}</a>
               {% endif %}
@@ -188,19 +198,25 @@
       <section class="registration section--offset">
         <div class="container">
           <div class="registration__block">
-            <h2 class="registration__title title">{{ site.title_2 }}</h2>
+            {% if site.title_2 %}
+              <h2 class="registration__title title">{{ site.title_2 }}</h2>
+            {% endif %}
             <div class="list-info">
-              {{ site.description_2 | safe }}
+              {% if site.description_2 != '<p><br></p>' %}
+                {{ site.description_2 | safe }}
+              {% endif %}
             </div>
           </div>
           <div class="figure-info">
-            <amp-img
-              width="1100"
-              height="585"
-              layout="intrinsic"
-              src="https://api.gang-soft.com{{ site.photo_about_2.image_url }}"
-              alt="1win"
-            ></amp-img>
+            {% if site.photo_about_2 %}
+              <amp-img
+                width="1100"
+                height="585"
+                layout="intrinsic"
+                src="https://api.gang-soft.com{{ site.photo_about_2.image_url }}"
+                alt="1win"
+              ></amp-img>
+            {% endif %}
             {% if site.button_2 and site.link_for_site_2 %}
               <a class="link" href="{{ site.link_for_site_2 }}">{{ site.button_2 }}</a>
             {% endif %}
@@ -211,18 +227,24 @@
       <section class="mirror section--offset">
         <div class="container">
           <div class="mirror__block">
-            <h2 class="mirror__title title">{{ site.title_3 }}</h2>
+            {% if site.title_3 %}
+              <h2 class="mirror__title title">{{ site.title_3 }}</h2>
+            {% endif %}
             <div class="list-info">
-              {{ site.description_3 | safe }}
+              {% if site.description_3 != '<p><br></p>' %}
+                {{ site.description_3 | safe }}
+              {% endif %}
             </div>
             <div class="figure-info">
-              <amp-img
-                width="1100"
-                height="585"
-                layout="intrinsic"
-                src="https://api.gang-soft.com{{ site.photo_about_3.image_url }}"
-                alt="1win"
-              ></amp-img>
+              {% if site.photo_about_3 %}
+                <amp-img
+                  width="1100"
+                  height="585"
+                  layout="intrinsic"
+                  src="https://api.gang-soft.com{{ site.photo_about_3.image_url }}"
+                  alt="1win"
+                ></amp-img>
+              {% endif %}
               {% if button_3 and link_for_site_3 %}
                 <a class="link" href="{{ site.link_for_site_3 }}">{{ site.button_3 }}</a>
               {% endif %}
@@ -234,9 +256,13 @@
       <section class="casino section--offset">
         <div class="container">
           <div class="casino__block">
-            <h2 class="casino__title title">{{ site.title_4 }}</h2>
+            {% if title_4 %}
+              <h2 class="casino__title title">{{ site.title_4 }}</h2>
+            {% endif %}
             <div class="list-info">
-              {{ site.description_4 | safe }}
+              {% if site.description_4 != '<p><br></p>' %}
+                {{ site.description_4 | safe }}
+              {% endif %}
             </div>
           </div>
         </div>
@@ -245,9 +271,14 @@
       <section class="bonus section--offset">
         <div class="container">
           <div class="bonus__block">
-            <h2 class="casino__title title">{{ site.title_5 }}</h2>
+            {% if title_5 %}
+              <h2 class="casino__title title">{{ site.title_5 }}</h2>
+            {% endif %}
+
             <div class="list-info">
-              {{ site.description_5 | safe }}
+              {% if site.description_5 != '<p><br></p>' %}
+                {{ site.description_5 | safe }}
+              {% endif %}
             </div>
           </div>
         </div>
