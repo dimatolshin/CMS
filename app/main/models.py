@@ -27,17 +27,17 @@ class Site(models.Model):
     shablon_name = models.CharField(verbose_name='Имя Шаблона', default='1WIN')
     title = models.CharField(default="""
     1WIN ВХОД НА&nbsp;ОФИЦИАЛЬНЫЙ САЙТ
-    """)
+    """,null=True,blank=True)
     description = models.TextField(verbose_name='Текст куска заголовка', default="""
-     <p> Используйте промокод: <a id="hero__promo" href="#">1winrupromo</a> и&nbsp;получите бонус <strong id="hero__price">до&nbsp;50&nbsp;000 рублей</strong> при регистрации.</p>
-    """)
+     <p> Используйте промокод: <a id="hero__promo" href="#">1winrupromo</a> и получите бонус <strong id="hero__price">до&nbsp;50&nbsp;000 рублей</strong> при регистрации.</p>
+    """,null=True,blank=True)
     title_button = models.CharField(verbose_name='Текст заголовка кнопки', null=True, blank=True, default="""
     Перейти на 1WIN
     """)
     link_for_site = models.CharField(verbose_name='Сслыка на заголовки продукта', null=True, blank=True)
     title_1 = models.CharField(verbose_name='Заголовок 1', default="""
      О компании
-    """)
+    """,null=True,blank=True)
     description_1 = models.TextField(verbose_name='Текст 1', default="""
     <p >
                 Чтобы войти на игровой портал БК достаточно иметь доступ в
@@ -98,12 +98,12 @@ class Site(models.Model):
                 на него по ссылке, где выбрать в меню «Скачать». Как только файл
                 загрузится, его можно сразу же устанавливать.
               </p>
-    """)
+    """,null=True,blank=True)
     button_1 = models.CharField(verbose_name='Текст кнопки 1', default='Перейти на 1WIN', null=True, blank=True)
     link_for_site_1 = models.CharField(verbose_name='Сслыка на продукт 1', null=True, blank=True)
     photo_1 = models.ForeignKey('Image', verbose_name='Фото 1', on_delete=models.SET_NULL, related_name='+', null=True,
                                 blank=True)
-    title_2 = models.CharField(verbose_name='Заголовок 2', default='1 WIN регистрация')
+    title_2 = models.CharField(verbose_name='Заголовок 2', default='1 WIN регистрация',null=True,blank=True)
     description_2 = models.TextField(verbose_name='Текст 2', default="""
      <p >
                 В Букмекерской конторе представлено огромное количество слотов и
@@ -172,12 +172,12 @@ class Site(models.Model):
               Каждый игрок может ощутить выгоду от регистрации, ведь получение
               фрибета открывает массу игровых возможностей.
             </p>
-    """)
+    """,null=True,blank=True)
     photo_about_2 = models.ForeignKey('Image', verbose_name='Фото 2', on_delete=models.SET_NULL, related_name='+',
                                       null=True, blank=True)
-    button_2 = models.CharField(verbose_name='Текст кнопки 2', default='Перейти на 1WIN')
+    button_2 = models.CharField(verbose_name='Текст кнопки 2', default='Перейти на 1WIN',null=True,blank=True)
     link_for_site_2 = models.CharField(verbose_name='Сслыка на продукт 2', null=True, blank=True)
-    title_3 = models.CharField(verbose_name='Заголовок 3', default='1 WIN зеркало')
+    title_3 = models.CharField(verbose_name='Заголовок 3', default='1 WIN зеркало',null=True,blank=True)
     description_3 = models.TextField(verbose_name='Текст 3', default="""
      <p>
                 1ВИН – это игровая платформа для тех, кто хочет испытать удачу в
@@ -242,7 +242,7 @@ class Site(models.Model):
                                       null=True, blank=True)
     button_3 = models.CharField(verbose_name='Текст кнопки 3', default='Перейти на 1WIN', null=True, blank=True)
     link_for_site_3 = models.CharField(verbose_name='Сслыка на продукт 3', null=True, blank=True)
-    title_4 = models.CharField(verbose_name='Заголовок 4', default='Заголовок 4')
+    title_4 = models.CharField(verbose_name='Заголовок 4', default='Заголовок 4',null=True,blank=True)
     description_4 = models.TextField(verbose_name='Текст 4', default="""
     <p>
                 Букмекерская контора 1win – это международная компания,
@@ -312,8 +312,8 @@ class Site(models.Model):
                 которые имеют шанс воспользоваться подарочными комбинациями
                 после создания личного кабинета.
               </p>
-    """)
-    title_5 = models.CharField(verbose_name='Заголовок 5', default='Заголовок 5')
+    """,null=True,blank=True)
+    title_5 = models.CharField(verbose_name='Заголовок 5', default='Заголовок 5',null=True,blank=True)
     description_5 = models.TextField(verbose_name='Текст 5', default="""
     <p>
                 1вин – всемирно известная букмекерская контора, которая
@@ -378,12 +378,12 @@ class Site(models.Model):
                 промокоду, который позволяет увеличить процентную ставку на
                 100-200 %.
               </p>
-    """)
+    """,null=True,blank=True)
 
     # Основная инфа
     domain_name = models.ForeignKey('Domain', on_delete=models.SET_NULL, null=True, blank=True,
                                     related_name='site_domain')
-    name_of_site = models.CharField(verbose_name='Название сайта')
+    name_of_site = models.CharField(verbose_name='Название сайта',null=True,blank=True)
     main_link = models.CharField(null=True, blank=True, verbose_name='Основная ссылка на продукт казика')
     yandex_metrika = models.CharField(null=True, blank=True, verbose_name='Яндех Метрика')
 
