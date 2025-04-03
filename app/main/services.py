@@ -58,6 +58,7 @@ async def custom_server(item):
 
 async def data_blocklist(item):
     return {
+        'id': item.get('id'),
         'title': item.get('title'),
         'descr': item.get('descr'),
         'btn_text': item.get('btn_text'),
@@ -68,6 +69,7 @@ async def data_blocklist(item):
 
 async def meta_teg_list(item):
     return {
+        'id': item.get('id'),
         'name': item.get('name'),
         'content': item.get('content'),
     }
