@@ -30,6 +30,7 @@ services:
     volumes:
       - /root/cms/storage/backend/media_data:/app/media
       - /root/cms/storage/share/static_data:/app/staticfiles
+      - /root/cms/storage/share/static_sites:/app/static_sites
     environment:
       RUNNING_IN_DOCKER: 'true'
       POSTGRES_USER: ${NAME_USER}
