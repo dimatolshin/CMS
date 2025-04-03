@@ -87,12 +87,10 @@ async def get_shablon_data(request):
     server_id = request.data.get('server_id')
 
     if not server_id:
-        site = await Site.objects.filter(shablon_name=shablon_name).select_related('photo_1', 'photo_about_2',
-                                                                                   'photo_about_3', 'domain_name',
+        site = await Site.objects.filter(shablon_name=shablon_name).select_related('domain_name',
                                                                                    'server').afirst()
     if server_id:
-        site = await Site.objects.filter(server__id=server_id).select_related('photo_1', 'photo_about_2',
-                                                                              'photo_about_3', 'domain_name',
+        site = await Site.objects.filter(server__id=server_id).select_related('domain_name',
                                                                               'server').afirst()
 
     data = await serverdata(site)
@@ -119,47 +117,18 @@ async def change_shablon_data(request):
     shablon_name = data.get('shablon_name')
     site = await Site.objects.filter(shablon_name=shablon_name).afirst()
 
-    if not site:
+    if not site or not data == 'server' or not data['server'] or not data == 'domain_name' or not data['domain_name']:
         return JsonResponse({'Error': 'Site Unexist'}, status=404)
 
     update_fields = {}
 
     fields = [
-        'title', 'description', 'title_button', 'link_for_site', 'title_1', 'description_1',
-        'button_1', 'link_for_site_1', 'title_2', 'description_2', 'button_2', 'link_for_site_2',
-        'title_3', 'description_3', 'button_3', 'link_for_site_3', 'title_4', 'description_4',
-        'title_5', 'description_5', 'domain_name', 'server', 'name_of_site', 'main_link', 'yandex_metrika',
+        'title', 'description', 'title_button', 'link_for_site', 'data_block', 'meta_teg', 'faq', 'domain_name',
+        'server',
+        'name_of_site', 'main_link',
+        'yandex_metrika',
         'promo_code'
     ]
-
-    image_fields = {
-        'photo_1': 'photo_1',
-        'photo_about_2': 'photo_about_2',
-        'photo_about_3': 'photo_about_3'
-    }
-
-    for field, image_field in image_fields.items():
-        if data[field] == 'None':
-            if field == 'photo_1':
-                site.photo_1 = None
-            elif field == 'photo_about_2':
-                site.photo_about_2 = None
-            elif field == 'photo_about_3':
-                site.photo_about_3 = None
-            await site.asave()
-        elif field in data:
-            image_data = data[field].split(';base64,')[1]
-            decoded_image = base64.b64decode(image_data)
-
-            filename = f'{shablon_name}_{field}.webp'
-
-            image = Image(name=f'{shablon_name}_{field}')
-            await sync_to_async(image.image.save)(filename, ContentFile(decoded_image), save=False)
-            await image.asave()
-
-            image.image_url = f"{settings.MEDIA_URL}{image.image.name}"
-            await image.asave(update_fields=['image_url'])
-            update_fields[image_field] = image
 
     for field in fields:
         if 'server' in data and data['server']:
@@ -177,14 +146,14 @@ async def change_shablon_data(request):
     if update_fields:
         await Site.objects.filter(shablon_name=shablon_name).aupdate(**update_fields)
 
-    site = await Site.objects.filter(shablon_name=shablon_name).select_related('photo_1', 'photo_about_2',
-                                                                               'photo_about_3', 'domain_name',
+    site = await Site.objects.filter(shablon_name=shablon_name).select_related('domain_name',
                                                                                'server').afirst()
 
     domain = await Domain.objects.filter(current_domain=site.domain_name.current_domain).select_related(
         'server').afirst()
     domain.server = site.server
     domain.status = 'Активен'
+
     domain.server.status = 'Активен'
     domain.Username = site.name_of_site
     await domain.asave()

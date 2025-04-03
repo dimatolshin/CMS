@@ -8,11 +8,6 @@ class VebmasterSerializator(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Image
-        fields = ['image_url']
-
 
 class DomainWithoutServerSerializers(serializers.ModelSerializer):
     class Meta:
@@ -27,9 +22,6 @@ class ServerSerializer(serializers.ModelSerializer):
 
 
 class SiteSerializer(serializers.ModelSerializer):
-    photo_1 = ImageSerializer(allow_null=True)
-    photo_about_2 = ImageSerializer(allow_null=True)
-    photo_about_3 = ImageSerializer(allow_null=True)
     id_vebmaster = VebmasterSerializator(allow_null=True)
     domain_name = DomainWithoutServerSerializers(many=True)
     server = ServerSerializer(many=True)

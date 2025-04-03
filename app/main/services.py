@@ -56,12 +56,26 @@ async def custom_server(item):
     }
 
 
+async def data_blocklist(item):
+    return {
+        'title': item.get('title'),
+        'descr': item.get('descr'),
+        'btn_text': item.get('btn_text'),
+        'btn_link': item.get('btn_link'),
+        'image': item.get('image'),
+    }
+
+
+async def meta_teg_list(item):
+    return {
+        'name': item.get('name'),
+        'content': item.get('content'),
+    }
+
+
 async def serverdata(site):
     return {
         "id": site.id if site else None,
-        "photo_1": site.photo_1.image_url if site.photo_1 else None ,
-        "photo_about_2": site.photo_about_2.image_url if site.photo_about_2 else None,
-        "photo_about_3": site.photo_about_3.image_url if site.photo_about_3 else None,
         "domain_name": [await custom_domain_name(item) async for item in Domain.objects.all()],
         "server": [await custom_server(item) async for item in Server.objects.all()],
         "shablon_name": site.shablon_name,
@@ -69,22 +83,8 @@ async def serverdata(site):
         "description": site.description,
         "title_button": site.title_button,
         "link_for_site": site.link_for_site,
-        "title_1": site.title_1,
-        "description_1": site.description_1,
-        "button_1": site.button_1,
-        "link_for_site_1": site.link_for_site_1,
-        "title_2": site.title_2,
-        "description_2": site.description_2,
-        "button_2": site.button_2,
-        "link_for_site_2": site.link_for_site_2,
-        "title_3": site.title_3,
-        "description_3": site.description_3,
-        "button_3": site.button_3,
-        "link_for_site_3": site.link_for_site_3,
-        "title_4": site.title_4,
-        "description_4": site.description_4,
-        "title_5": site.title_5,
-        "description_5": site.description_5,
+        "data_block": [await data_blocklist(item) for item in site.data_block],
+        "meta_teg": [await meta_teg_list(item) for item in site.meta_teg],
         "name_of_site": site.name_of_site,
         "main_link": site.main_link,
         "yandex_metrika": site.yandex_metrika,
@@ -95,26 +95,27 @@ async def serverdata(site):
 
 async def domains(item):
     return {
-        'id':item.id if item.id else None,
-        'Username':item.Username if item.Username else None,
-        'Current_domain':item.current_domain if item.current_domain else None,
-        'Domain_mask':item.domain_mask if item.domain_mask else None,
-        'Server_id':item.server.id if item.server else None,
-        'Status':item.status if item.status else None
+        'id': item.id if item.id else None,
+        'Username': item.Username if item.Username else None,
+        'Current_domain': item.current_domain if item.current_domain else None,
+        'Domain_mask': item.domain_mask if item.domain_mask else None,
+        'Server_id': item.server.id if item.server else None,
+        'Status': item.status if item.status else None
     }
+
 
 async def all_servers(item):
     return {
-        'id':item.id if item.id else None,
-        'ip':item.ip if item.ip else None,
-        'status':item.status if item.status else None,
-        'user':item.user if item.user else None,
-        'password':item.password if item.password else None,
-        'skip':item.skip if item.skip else None,
-        'Cf_email':item.Cf_email if item.Cf_emailelse else None,
-        'Cf_key':item.Cf_key if item.Cf_keyelse else None,
-        'Php_mode':item.Php_mode if item.Php_mode else None,
-        'Registrar_vendor':item.Registrar_vendor if item.Registrar_vendor else None,
-        'Registrar_username':item.Registrar_username if item.Registrar_usernameelse else None,
-        'Registrar_apLKey':item.Registrar_apLKey if item.Registrar_apLKey else None
+        'id': item.id if item.id else None,
+        'ip': item.ip if item.ip else None,
+        'status': item.status if item.status else None,
+        'user': item.user if item.user else None,
+        'password': item.password if item.password else None,
+        'skip': item.skip if item.skip else None,
+        'Cf_email': item.Cf_email if item.Cf_emailelse else None,
+        'Cf_key': item.Cf_key if item.Cf_keyelse else None,
+        'Php_mode': item.Php_mode if item.Php_mode else None,
+        'Registrar_vendor': item.Registrar_vendor if item.Registrar_vendor else None,
+        'Registrar_username': item.Registrar_username if item.Registrar_usernameelse else None,
+        'Registrar_apLKey': item.Registrar_apLKey if item.Registrar_apLKey else None
     }
