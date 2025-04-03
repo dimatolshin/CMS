@@ -84,13 +84,13 @@ async def test_point(request):
 @site_authenticated
 async def get_shablon_data(request):
     shablon_name = request.data.get('shablon_name')
-    server_id = request.data.get('server_id')
+    domain_id = request.data.get('domain_id')
 
-    if not server_id:
+    if not domain_id:
         site = await Site.objects.filter(shablon_name=shablon_name).select_related('domain_name',
                                                                                    'server').afirst()
-    if server_id:
-        site = await Site.objects.filter(server__id=server_id).select_related('domain_name',
+    if domain_id:
+        site = await Site.objects.filter(domain_name__id=domain_id).select_related('domain_name',
                                                                               'server').afirst()
 
     data = await serverdata(site)
@@ -117,7 +117,7 @@ async def change_shablon_data(request):
     shablon_name = data.get('shablon_name')
     site = await Site.objects.filter(shablon_name=shablon_name).afirst()
 
-    if not site or not data == 'server' or not data['server'] or not data == 'domain_name' or not data['domain_name']:
+    if not site :
         return JsonResponse({'Error': 'Site Unexist'}, status=404)
 
     update_fields = {}
