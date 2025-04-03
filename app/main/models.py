@@ -71,7 +71,7 @@ class Site(models.Model):
     update_data = models.DateTimeField(default=get_moscow_time)
 
     def __str__(self):
-        return f'id:{self.id}, domain:{self.domain_name}'
+        return f'id:{self.id}, shablon_name:{self.shablon_name}'
 
 
 class Server(models.Model):
