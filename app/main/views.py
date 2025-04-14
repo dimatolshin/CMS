@@ -38,6 +38,7 @@ class LoginView(TokenObtainPairView):
             key='refresh_token',
             value=refresh_token,
             max_age=timedelta(days=1),
+            domain='gang-soft.com',
             httponly=False,
             secure=True,  # Только для HTTPS
             samesite='Strict',  # Защита от CSRF
@@ -46,6 +47,7 @@ class LoginView(TokenObtainPairView):
             key='access_token',
             value=access_token,
             max_age=timedelta(days=10),
+            domain='gang-soft.com',
             httponly=False,
             secure=True,  # Только для HTTPS
             samesite='Strict',  # Защита от CSRF
