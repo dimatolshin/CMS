@@ -105,6 +105,38 @@
         }
       </style>
     </noscript>
+    <script>
+       document.addEventListener("DOMContentLoaded", () => {
+        const scrollButton = document.getElementById("scrollButton");
+        if (scrollButton) {
+          scrollButton.addEventListener("click", () => {
+            window.scrollTo({
+              top: document.body.scrollHeight,
+              behavior: "smooth",
+            });
+          });
+        }
+        const copyButton = document.getElementById("copyButton");
+        const textBlock = document.getElementById("textToCopy");
+        if (copyButton && textBlock) {
+          copyButton.addEventListener("click", async () => {
+            try {
+              const originalText = textBlock.textContent;
+              await navigator.clipboard.writeText(originalText);
+              textBlock.textContent = "Скопировано!";
+
+              // Возвращаем исходный текст через 2 секунды
+              setTimeout(() => {
+                textBlock.textContent = originalText;
+              }, 1000);
+            } catch (err) {
+              console.error('Ошибка при копировании: ', err);
+            }
+          });
+        }
+      });
+
+    </script>
     <script async src="https://cdn.ampproject.org/v0.js"></script>
   </head>
   <body>
@@ -118,55 +150,61 @@
           </div>
         </noscript>
 
-    <header class="header">
-      <div class="container-fluid">
-        <a class="logo" href="{{site.main_link}}">
-          <picture>
-            <source
-              srcset="https://api.gang-soft.com/media/header(1).png"
-              media="(max-width: 1200px)"
-            />
-            <img
-              src="https://api.gang-soft.com/media/header(2).png"
-              alt="шапка сайта 1win"
-            />
-          </picture>
-        </a>
-        <div class="mobile">
-          <amp-img
-            width="105"
-            height="53"
-            layout="intrinsic"
-            src="https://api.gang-soft.com/media/logo.png"
-            alt="logo"
-          ></amp-img>
-          <div class="mobile__inner">
-            <a class="mobile__inner__link mobile__inner__link--green" href="{{site.main_link}}"
-              >Регистрация</a
-            >
-            <a class="mobile__inner__link" href="{{site.main_link}}">Вход</a>
+     <header>
+        <a id="mainLink" class="logo" href="">
+          <div class="header">
+            <img src="https://api.gang-soft.com/media/logo.png" alt="logo" />
+            <div class="mobile__inner">
+              <a class="mobile__inner__link mobile__inner__link--green" href="#"
+                >Регистрация</a
+              >
+              <a class="mobile__inner__link" href="#">Вход</a>
+            </div>
           </div>
-        </div>
-      </div>
-    </header>
+        </a>
+      </header>
+
 
     <main class="main">
-      <section class="hero">
-        <div class="hero__block">
-          {% if site.title %}
-            <h1 id="hero__title">{{ site.title }}</h1>
-          {% endif %}
-          <div id="hero__descr">
-            {% if site.description != '<p><br></p>' %}
-              {{ site.description | safe }}
-            {% endif %}
+       <div class="bonus_container">
+          <div id="copyButton" class="bonus_block">
+            <div class="left">
+              <p class="bonus_title">БОНУС</p>
+              <p class="bonus_text">ПРИ РЕГИСТРАЦИИ ДО 50.000 Р</p>
+            </div>
+
+            <div class="right">
+              <p class="bonus_text">ПО ПРОМОКОДУ</p>
+                {% if site.promo_code %}
+              <p id="textToCopy" class="bonus_text green">{{site.promo_code}}</p>
+                {% endif %}
+            </div>
           </div>
-          {% if site.title_button and site.link_for_site %}
-            <a class="link" id="hero__link" href="{{ site.link_for_site }}">{{ site.title_button }}</a>
-          {% endif %}
-          <span id="hero__info">Промокод скопируется автоматически!</span>
+          <div class="prize_block">
+            <div class="prize">
+              <img
+                class="img_gift"
+                src="https://api.gang-soft.com/media/img_gift.webp"
+                alt="gift"
+              />
+              <p class="prize_text">
+                <span class="prize_text_blue">+500%</span> на первый <br />
+                депозит
+              </p>
+            </div>
+            <button id="scrollButton" class="btn">ЗАБРАТЬ</button>
+          </div>
         </div>
-      </section>
+        <img
+          loading="lazy"
+          class="main_img"
+          src="https://api.gang-soft.com/media/1win_1.webp"
+          alt=""
+        />
+         {% if site.link_for_site and site.title_button %}
+        <a id="link_for_site" class="btn_link" href="{{site.link_for_site}}">{{site.title_button}}</a>
+        {% endif %}
+
 
       {% for item in site.data_block %}
         <section class="about section--offset">

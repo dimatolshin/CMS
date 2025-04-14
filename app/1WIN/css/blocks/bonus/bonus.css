@@ -1,0 +1,145 @@
+.bonus_container {
+  position: sticky;
+  top: 98px;
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+  z-index: 200;
+}
+
+.bonus_block {
+  cursor: pointer;
+  border-radius: 10000px;
+  padding: 20px 30px;
+  width: 572px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: linear-gradient(90deg, #6f8bb1 0%, #563e56 100%);
+}
+
+.bonus_title {
+  margin-bottom: 6px;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 78%;
+}
+.bonus_text {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 125%;
+}
+
+.green {
+  margin-top: 6px;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 78%;
+  text-align: right;
+  color: #3c9f81;
+}
+
+.prize_block {
+  border-radius: 10000px;
+  padding: 11px 19px;
+  width: 572px;
+  height: 96px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: #1c263f;
+}
+
+.prize {
+  display: flex;
+  gap: 22px;
+}
+
+.img_gift {
+  width: 55px;
+  height: 55px;
+}
+
+.prize_text {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 125%;
+}
+
+.prize_text_blue {
+  color: #1581ed;
+}
+
+.btn {
+  border-radius: 124px;
+  padding: 12px 30px;
+  width: 229px;
+  height: 61px;
+  color: white;
+  font-weight: 700;
+  font-size: 32px;
+  text-align: center;
+  cursor: pointer;
+
+  background: linear-gradient(180deg, #1581ed 0%, #0662d1 100%);
+}
+
+ @media (max-width: 1140px) {
+  .bonus_container {
+    flex-direction: column;
+  }
+  .bonus_block {
+    width: 100%;
+  }
+  .prize_block {
+    width: 100%;
+  }
+}
+
+@media (max-width: 580px) {
+  .bonus_container {
+    top: 70px;
+    margin-top: 0px;
+    gap: 10px;
+  }
+  .bonus_block {
+    height: 63px;
+  }
+  .prize_block {
+    height: 63px;
+  }
+  .bonus_title {
+    margin-bottom: 4px;
+    font-size: 24px;
+    line-height: 104%;
+  }
+  .bonus_text {
+    font-size: 12px;
+    line-height: 120%;
+  }
+
+  .green {
+    margin-top: 4px;
+    font-size: 24px;
+    line-height: 101%;
+  }
+
+  .prize_text {
+    font-size: 14px;
+    line-height: 120%;
+  }
+  .btn {
+    width: 129px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .img_gift {
+    width: 41px;
+    height: 41px;
+  }
+}

@@ -244,7 +244,7 @@ async def take_bot_data(request):
 @api_view(["GET"])
 @site_authenticated
 async def get_all_domain(request: HttpRequest):
-    all_domain = [await domains(item) async for item in Domain.objects.select_related('server').all()]
+    all_domain = [await domains(item) async for item in Domain.objects.select_related('server').order_by('id').all()]
 
     count_domain = len(all_domain)
     paginator = Paginator(all_domain, 6)
