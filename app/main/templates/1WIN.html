@@ -7,7 +7,7 @@
       rel="canonical"
       href="https://amp.dev/ru/documentation/guides-and-tutorials/start/create/basic_markup/"
     />
-    <link rel="icon" type="image/svg+xml" href="favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="https://api.gang-soft.com/media/favicon.ico" />
     {% for item in site.meta_teg %}
       <meta
         name = "description"
@@ -125,7 +125,7 @@
             try {
               const originalText = textBlock.textContent;
               await navigator.clipboard.writeText(originalText);
-              textBlock.textContent = "Скопировано!";
+              textBlock.textContent = "Успех!";
 
               // Возвращаем исходный текст через 2 секунды
               setTimeout(() => {
