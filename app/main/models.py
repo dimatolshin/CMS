@@ -45,7 +45,6 @@ class Site(models.Model):
     }])
     meta_teg = models.JSONField(verbose_name='Мета теги', null=True, blank=True,default=[{
         'id':'',
-        'name':'',
         'content':'',
     }])
     faq= models.JSONField(verbose_name='Вопросы Ответы',null=True, blank=True , default=[{

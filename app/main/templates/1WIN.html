@@ -10,7 +10,7 @@
 
     {% for item in site.meta_teg %}
       <meta
-        name = "{{item.name}}"
+        name = "description"
         content="{{ item.content }}"
       />
     {% endfor %}
@@ -174,8 +174,8 @@
             </div>
 
             <div class="right">
-              <p class="bonus_text">ПО ПРОМОКОДУ</p>
                 {% if site.promo_code %}
+              <p class="bonus_text">ПО ПРОМОКОДУ</p>
               <p id="textToCopy" class="bonus_text green">{{site.promo_code}}</p>
                 {% endif %}
             </div>
@@ -184,7 +184,7 @@
             <div class="prize">
               <img
                 class="img_gift"
-                src="https://api.gang-soft.com/media/img_gift.webp"
+                src="https://api.gang-soft.com/media/img_gift.png"
                 alt="gift"
               />
               <p class="prize_text">
@@ -198,7 +198,7 @@
         <img
           loading="lazy"
           class="main_img"
-          src="https://api.gang-soft.com/media/1win_1.webp"
+          src="https://api.gang-soft.com/media/1win_1.png"
           alt=""
         />
          {% if site.link_for_site and site.title_button %}
