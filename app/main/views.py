@@ -241,6 +241,13 @@ async def take_bot_data(request):
         await Domain.objects.acreate(Username=domain_mask_2, current_domain=current_domain_2, domain_mask=domain_mask_2,
                                      status=status_2)
 
+        html_content = await sync_to_async(render_to_string)(f'redirect.html', {'current_domain_2': current_domain_2})
+
+        os.makedirs(f'redirect_holder', exist_ok=True)
+
+        with open(f'redirect_holder/index.html', 'w') as f:
+            f.write(html_content)
+
 
         source_dir = f'static_sites/{domain.current_domain}'
 
@@ -274,14 +281,6 @@ async def take_bot_data(request):
                 os.makedirs(os.path.dirname(dst_path), exist_ok=True)
                 shutil.copy2(src_path, dst_path)
 
-                if file == 'index.html':
-                    with open(src_path, 'r', encoding='utf-8') as f:
-                        content = f.read()
-
-                    modified_content = content.replace('{{current_domain}}', current_domain)
-
-                    with open(dst_path, 'w', encoding='utf-8') as f:
-                        f.write(modified_content)
             else:
                 # Обычное копирование для остальных файлов
                 shutil.copy2(src_path, dst_path)
