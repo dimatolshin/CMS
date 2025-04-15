@@ -220,17 +220,90 @@ async def take_bot_data(request):
     current_domain = request.data.get('current_domain')
     domain_mask = request.data.get('domain_mask')
     status = request.data.get('status')
+    current_domain_2 = request.data.get('current_domain_2')
+    domain_mask_2 = request.data.get('domain_mask_2')
+    status_2 = request.data.get('status_2')
 
     if not current_domain or not domain_mask or not status:
         return JsonResponse({'Error': 'Data uncorrect'}, status=404)
 
-    domain = await Domain.objects.filter(current_domain=current_domain).afirst()
+    domain = await Domain.objects.filter(current_domain=current_domain).select_related('server').afirst()
 
     if domain:
-        await Domain.objects.filter(status=status).aupdate(status=status)
+       domain.status=status
+       await domain.asave()
     else:
         await Domain.objects.acreate(Username=domain_mask, current_domain=current_domain, domain_mask=domain_mask,
                                      status=status)
+
+
+    if current_domain_2 and domain_mask_2 and status_2:
+        await Domain.objects.acreate(Username=domain_mask_2, current_domain=current_domain_2, domain_mask=domain_mask_2,
+                                     status=status_2)
+
+
+        source_dir = f'static_sites/{domain.current_domain}'
+
+        target_dir = f'static_sites/{current_domain_2}'
+
+        # Если исходная папка существует
+        if os.path.exists(source_dir):
+            # Создаём целевую папку (если её нет)
+            Path(target_dir).mkdir(parents=True, exist_ok=True)
+
+            # Копируем ВСЁ содержимое из source_dir в target_dir
+            for item in os.listdir(source_dir):
+                src_path = os.path.join(source_dir, item)
+                dst_path = os.path.join(target_dir, item)
+
+                if os.path.isdir(src_path):
+                    shutil.copytree(src_path, dst_path, dirs_exist_ok=True)
+                else:
+                    shutil.copy2(src_path, dst_path)
+        else:
+            print(f"Source directory {source_dir} does not exist!")
+
+        Path(source_dir).mkdir(parents=True, exist_ok=True)
+
+        for root, dirs, files in os.walk(f'redirect_holder'):
+            for file in files:
+                src_path = os.path.join(root, file)
+                rel_path = os.path.relpath(src_path, start=f'redirect_holder')
+                dst_path = os.path.join(source_dir, rel_path)
+
+                os.makedirs(os.path.dirname(dst_path), exist_ok=True)
+                shutil.copy2(src_path, dst_path)
+
+                if file == 'index.html':
+                    with open(src_path, 'r', encoding='utf-8') as f:
+                        content = f.read()
+
+                    modified_content = content.replace('{{current_domain}}', current_domain)
+
+                    with open(dst_path, 'w', encoding='utf-8') as f:
+                        f.write(modified_content)
+            else:
+                # Обычное копирование для остальных файлов
+                shutil.copy2(src_path, dst_path)
+
+        base_url = "https://api.dynadot.com/api3.xml"
+        params = {
+            'key': os.getenv('DYNADOT_API_KEY'),
+            'command': 'set_dns2',
+            'domain': current_domain_2,
+            'main_record_type0': 'a',
+            'main_record0': domain.server.ip,
+            'subdomain0': 'www',
+            'sub_record_type0': 'a',
+            'sub_record0': domain.server.ip
+        }
+
+        requests.get(
+            base_url,
+            params=params,
+            headers={'User-Agent': 'YourApp/1.0'}
+        )
+
 
     return JsonResponse({'Info': 'Success'}, status=200)
 
