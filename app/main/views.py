@@ -193,7 +193,7 @@ async def change_shablon_data(request):
                                           dop='www.')
     if dns_record_1:
         await delete_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain,
-                                dns_record=dns_record, dop='www.')
+                                dns_record=dns_record_1, dop='www.')
     await create_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain, dop='www.')
 
     return JsonResponse({'Info': 'Success'}, status=200)
