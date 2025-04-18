@@ -182,29 +182,34 @@ async def change_shablon_data(request):
             os.makedirs(os.path.dirname(dst_path), exist_ok=True)
             shutil.copy2(src_path, dst_path)
 
-    base_url = "https://api.dynadot.com/api3.xml"
-    params = {
-        'key': os.getenv('DYNADOT_API_KEY'),
-        'command': 'set_dns2',
-        'domain': domain.current_domain,
-        'main_record_type0': 'a',
-        'main_record0': domain.server.ip,
-        'subdomain0': 'www',
-        'sub_record_type0': 'a',
-        'sub_record0': domain.server.ip
-    }
+    zone_id = await find_zone_id(domain_name=domain.current_domain)
+    dns_record = await check_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain)
+    if dns_record:
+        await delete_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain,
+                                dns_record=dns_record)
+    await create_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain)
 
-    response = requests.get(
-        base_url,
-        params=params,
-        headers={'User-Agent': 'YourApp/1.0'}
-    )
+    dns_record_1 = await check_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain,
+                                          dop='www.')
+    if dns_record_1:
+        await delete_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain,
+                                dns_record=dns_record, dop='www.')
+    await create_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain, dop='www.')
 
-    return JsonResponse({'Info': 'Success',
-                         'status_code': response.text}, status=200)
+    return JsonResponse({'Info': 'Success'}, status=200)
 
 
-
+@swagger_auto_schema(
+     methods=(['POST']),
+     request_body=request_body.GetDomainData,
+     responses={
+         '404': get_response_examples({'error': True, 'Error': 'Данные переданы некорректные.'}),
+         '200': get_response_examples({'Info': 'Success'}),
+     },
+     tags=['Боты'],
+     operation_summary='получение инфы от ботов ')
+@api_view(["POST"])
+async def take_bot_data(request):
     current_domain = request.data.get('current_domain')
     domain_mask = request.data.get('domain_mask')
     status = request.data.get('status')
@@ -228,7 +233,7 @@ async def change_shablon_data(request):
     if current_domain_2 and domain_mask_2 and status_2:
         await Domain.objects.acreate(Username=domain_mask_2, current_domain=current_domain_2, domain_mask=domain_mask_2,
                                      status=status_2,redirect_domain=domain)
-
+        domain2= await Domain.objects.filter(current_domain=current_domain_2).select_related('server').afirst()
         html_content = await sync_to_async(render_to_string)(f'redirect.html', {'current_domain_2': current_domain_2})
 
         os.makedirs(f'redirect_holder', exist_ok=True)
@@ -273,23 +278,19 @@ async def change_shablon_data(request):
                 # Обычное копирование для остальных файлов
                 shutil.copy2(src_path, dst_path)
 
-        base_url = "https://api.dynadot.com/api3.xml"
-        params = {
-            'key': os.getenv('DYNADOT_API_KEY'),
-            'command': 'set_dns2',
-            'domain': current_domain_2,
-            'main_record_type0': 'a',
-            'main_record0': domain.server.ip,
-            'subdomain0': 'www',
-            'sub_record_type0': 'a',
-            'sub_record0': domain.server.ip
-        }
 
-        requests.get(
-            base_url,
-            params=params,
-            headers={'User-Agent': 'YourApp/1.0'}
-        )
+        zone_id = await find_zone_id(domain_name=domain2.current_domain)
+        dns_record=await check_cloud_fire(zone_id=zone_id,ip=domain2.server.ip,domain_name=domain2.current_domain)
+        if dns_record:
+            await delete_cloud_fire(zone_id=zone_id,ip=domain2.server.ip,domain_name=domain2.current_domain,dns_record=dns_record)
+        await create_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain)
+
+        dns_record_1=await check_cloud_fire(zone_id=zone_id,ip=domain2.server.ip,domain_name=domain2.current_domain,dop='www.')
+        if dns_record_1:
+            await delete_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,
+                                    dns_record=dns_record,dop='www.')
+        await create_cloud_fire(zone_id=zone_id,ip=domain2.server.ip,domain_name=domain2.current_domain,dop='www.')
+
 
 
     return JsonResponse({'Info': 'Success'}, status=200)
