@@ -98,6 +98,7 @@ class Domain(models.Model):
     domain_mask = models.CharField()
     server = models.ForeignKey(Server, on_delete=models.SET_NULL, null=True, blank=True, related_name='domain')
     status = models.CharField()
+    redirect_domain = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='main_domain')
     create_data = models.DateTimeField(default=get_moscow_time)
     update_data = models.DateTimeField(default=get_moscow_time)
 

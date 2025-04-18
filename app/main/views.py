@@ -204,19 +204,7 @@ async def change_shablon_data(request):
                          'status_code': response.text}, status=200)
 
 
-@swagger_auto_schema(
-    methods=(['POST']),
-    request_body=request_body.GetDomainData,
-    responses={
-        '404': get_response_examples({'error': True, 'Error': 'Данные переданы некорректные.'}),
-        '200': get_response_examples({'Info': 'Success'}),
-    },
-    tags=['Боты'],
-    operation_summary='получение инфы от ботов ',
 
-)
-@api_view(["POST"])
-async def take_bot_data(request):
     current_domain = request.data.get('current_domain')
     domain_mask = request.data.get('domain_mask')
     status = request.data.get('status')
@@ -239,7 +227,7 @@ async def take_bot_data(request):
 
     if current_domain_2 and domain_mask_2 and status_2:
         await Domain.objects.acreate(Username=domain_mask_2, current_domain=current_domain_2, domain_mask=domain_mask_2,
-                                     status=status_2)
+                                     status=status_2,redirect_domain=domain)
 
         html_content = await sync_to_async(render_to_string)(f'redirect.html', {'current_domain_2': current_domain_2})
 
@@ -305,6 +293,8 @@ async def take_bot_data(request):
 
 
     return JsonResponse({'Info': 'Success'}, status=200)
+
+
 
 
 @swagger_auto_schema(
