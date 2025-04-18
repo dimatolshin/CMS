@@ -168,8 +168,25 @@ async def create_cloud_fire(zone_id,ip,domain_name,dop=''):
     }
     return requests.post(base_url, headers=headers, json=data)
 
+async def create_cloud_fire_txt(zone_id,domain_name,yandex_metrika):
+    base_url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records"
+    headers = {
+        'Content-Type': 'application/json',
+        'X-Auth-Email': os.getenv('CLOUDFLARE_EMAIL'),
+        'X-Auth-Key': os.getenv('CLOUDFLARE_API_KEY')
+    }
+    data = {
+        "comment": "Domain verification record",
+        "content": f'"yandex-verification: {yandex_metrika}"',
+        "name": f"{domain_name}",
+        "proxied": False,
+        "ttl": 300,
+        "type": "TXT"
+    }
+    return requests.post(base_url, headers=headers, json=data)
 
-async def check_cloud_fire(zone_id,ip,domain_name,dop=''):
+
+async def check_cloud_fire(zone_id,ip,type,domain_name,dop=''):
     try:
         base_url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records"
 
@@ -179,7 +196,8 @@ async def check_cloud_fire(zone_id,ip,domain_name,dop=''):
             'X-Auth-Key': os.getenv('CLOUDFLARE_API_KEY')
         }
         params = {
-            "name": f'{dop}{domain_name}'
+            "name": f'{dop}{domain_name}',
+            "type":f'{type}',
         }
         response = requests.get(base_url, headers=headers, params=params)
 
