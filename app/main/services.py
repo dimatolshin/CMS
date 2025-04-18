@@ -170,22 +170,25 @@ async def create_cloud_fire(zone_id,ip,domain_name,dop=''):
 
 
 async def check_cloud_fire(zone_id,ip,domain_name,dop=''):
-    base_url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records"
+    try:
+        base_url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records"
 
-    headers = {
-        'Content-Type': 'application/json',
-        'X-Auth-Email': os.getenv('CLOUDFLARE_EMAIL'),
-        'X-Auth-Key': os.getenv('CLOUDFLARE_API_KEY')
-    }
-    params = {
-        "name": f'{dop}{domain_name}'
-    }
-    response = requests.get(base_url, headers=headers, params=params)
+        headers = {
+            'Content-Type': 'application/json',
+            'X-Auth-Email': os.getenv('CLOUDFLARE_EMAIL'),
+            'X-Auth-Key': os.getenv('CLOUDFLARE_API_KEY')
+        }
+        params = {
+            "name": f'{dop}{domain_name}'
+        }
+        response = requests.get(base_url, headers=headers, params=params)
 
-    response.raise_for_status()  # Проверка на ошибки
+        response.raise_for_status()  # Проверка на ошибки
 
-    data = response.json()
-    return data['result'][0]['id']
+        data = response.json()
+        return data['result'][0]['id']
+    except Exception:
+        return False
 
 async def delete_cloud_fire(zone_id,ip,domain_name,dns_record,dop=''):
     base_url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records/{dns_record}"
