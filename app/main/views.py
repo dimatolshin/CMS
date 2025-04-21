@@ -240,7 +240,7 @@ async def take_bot_data(request):
 
     if current_domain_2 and domain_mask_2 and status_2:
         await Domain.objects.acreate(Username=domain_mask_2, current_domain=current_domain_2, domain_mask=domain_mask_2,
-                                     status=status_2, redirect_domain=domain)
+                                     status=status_2, redirect_domain=domain, server=domain.server)
         domain2 = await Domain.objects.filter(current_domain=current_domain_2).select_related('server').afirst()
         html_content = await sync_to_async(render_to_string)(f'redirect.html', {'current_domain_2': current_domain_2})
 
@@ -285,34 +285,33 @@ async def take_bot_data(request):
                 # Обычное копирование для остальных файлов
                 shutil.copy2(src_path, dst_path)
 
-        try:
-            zone_id = await find_zone_id(domain_name=domain2.current_domain)
-            dns_record = await check_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, type='A',
-                                                domain_name=domain2.current_domain)
-            if dns_record:
-                await delete_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,
-                                        dns_record=dns_record)
-            await create_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain)
+        zone_id = await find_zone_id(domain_name=domain2.current_domain)
+        dns_record = await check_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, type='A',
+                                            domain_name=domain2.current_domain)
+        if dns_record:
+            await delete_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,
+                                    dns_record=dns_record)
+        await create_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain)
 
-            dns_record_1 = await check_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, type='A',
-                                                  domain_name=domain2.current_domain, dop='www.')
-            if dns_record_1:
-                await delete_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,
-                                        dns_record=dns_record_1, dop='www.')
+        dns_record_1 = await check_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, type='A',
+                                              domain_name=domain2.current_domain, dop='www.')
+        if dns_record_1:
+            await delete_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,
+                                    dns_record=dns_record_1, dop='www.')
 
-            dns_record_2 = await check_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, type='TXT',
-                                                  domain_name=domain2.current_domain)
-            if dns_record_2:
-                await delete_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,
-                                        dns_record=dns_record_2)
-            site = await Site.objects.filter(domain_name=domain).afirst()
-            await create_cloud_fire_txt(zone_id=zone_id, domain_name=domain2.current_domain,
-                                        yandex_metrika=site.yandex_metrika)
+        dns_record_2 = await check_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, type='TXT',
+                                              domain_name=domain2.current_domain)
+        if dns_record_2:
+            await delete_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,
+                                    dns_record=dns_record_2)
 
-            return JsonResponse({'Info': 'Success'}, status=200)
+        yandex_metrika = (
+            await domain2.site_domain.afirst()).yandex_metrika if await domain2.site_domain.aexists() else None
 
-        except Exception as e:
-            return JsonResponse({'Error':e},status=404)
+        await create_cloud_fire_txt(zone_id=zone_id, domain_name=domain2.current_domain,
+                                    yandex_metrika=yandex_metrika)
+
+        return JsonResponse({'Info': 'Success'}, status=200)
 
 
 @swagger_auto_schema(
