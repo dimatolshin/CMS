@@ -298,6 +298,7 @@ async def take_bot_data(request):
         if dns_record_1:
             await delete_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,
                                     dns_record=dns_record_1, dop='www.')
+        await create_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,dop='www.')
 
         dns_record_2 = await check_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, type='TXT',
                                               domain_name=domain2.current_domain)
