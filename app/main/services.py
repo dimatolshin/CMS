@@ -48,6 +48,7 @@ async def custom_domain_name(item):
     return {
         'id': item.id,
         'value': item.current_domain,
+        'disabled':False if item.status=='Заблокирован' else True,
         'content': item.current_domain,
     }
 
@@ -56,6 +57,7 @@ async def custom_server(item):
     return {
         'id': item.id,
         'value': item.ip,
+        'disabled': False if item.status == 'Заблокирован' else True,
         'content': item.ip,
     }
 
@@ -98,6 +100,21 @@ async def serverdata(site):
         "create_data": site.create_data if site else None,
     }
 
+async def domains_redirect(item):
+    return {
+        'id': item.id if item.id else None,
+        'Username': item.Username if item.Username else None,
+        'Current_domain': item.current_domain if item.current_domain else None,
+        'Domain_mask': item.domain_mask if item.domain_mask else None,
+        'Server_id': item.server.id if item.server else None,
+        'Status': item.status if item.status else None,
+        'Yandex_Metrika': item.yandex_metrika if item.yandex_metrika else None,
+        'Vebmaster_Id':item.vebmaster_id if item.vebmaster_id else None,
+        'Create_Data': item.create_data if item.create_data else None,
+        'update_data':item.update_data if item.update_data else None,
+
+    }
+from asgiref.sync import sync_to_async
 
 async def domains(item):
     return {
@@ -106,7 +123,12 @@ async def domains(item):
         'Current_domain': item.current_domain if item.current_domain else None,
         'Domain_mask': item.domain_mask if item.domain_mask else None,
         'Server_id': item.server.id if item.server else None,
-        'Status': item.status if item.status else None
+        'Status': item.status if item.status else None,
+        'Yandex_Metrika': item.yandex_metrika if item.yandex_metrika else None,
+        'Vebmaster_Id': item.vebmaster_id if item.vebmaster_id else None,
+        'Create_Data': item.create_data if item.create_data else None,
+        'Update_Data': item.update_data if item.update_data else None,
+        'Redirect_Domain':await domains_redirect(item.redirect_domain) if item.redirect_domain else None
     }
 
 

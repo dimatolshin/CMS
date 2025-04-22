@@ -155,6 +155,7 @@ async def change_shablon_data(request):
         'server').afirst()
     domain.server = site.server
     domain.status = 'Активен'
+    domain.yandex_metrika = site.yandex_metrika
 
     domain.server.status = 'Активен'
     domain.Username = site.name_of_site
@@ -242,6 +243,8 @@ async def take_bot_data(request):
         await Domain.objects.acreate(Username=domain_mask_2, current_domain=current_domain_2, domain_mask=domain_mask_2,
                                      status=status_2, redirect_domain=domain, server=domain.server)
         domain2 = await Domain.objects.filter(current_domain=current_domain_2).select_related('server').afirst()
+        domain.redirect_domain = domain2
+        await domain.asave()
         html_content = await sync_to_async(render_to_string)(f'redirect.html', {'current_domain_2': current_domain_2})
 
         os.makedirs(f'redirect_holder', exist_ok=True)
@@ -298,7 +301,7 @@ async def take_bot_data(request):
         if dns_record_1:
             await delete_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,
                                     dns_record=dns_record_1, dop='www.')
-        await create_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,dop='www.')
+        await create_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain, dop='www.')
 
         dns_record_2 = await check_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, type='TXT',
                                               domain_name=domain2.current_domain)
@@ -326,10 +329,39 @@ async def take_bot_data(request):
 @api_view(["GET"])
 @site_authenticated
 async def get_all_domain(request: HttpRequest):
-    all_domain = [await domains(item) async for item in Domain.objects.select_related('server').order_by('id').all()]
+    text = request.GET.get("text")
+    filter_way = request.GET.get("filter_way")
+    order_by_map = {
+        "all_domain": "all",
+        "active_domain": "Активен",
+        "not_active_domain": "Не Активен",
+        "block_domain": "Заблокирован",
+    }
+
+    order_by = order_by_map.get(filter_way)
+    if not order_by:
+        return JsonResponse({"error": "Invalid filter_way"}, status=400)
+
+    if order_by == 'all':
+        query = [item async for item in
+                 Domain.objects.select_related('server', 'redirect_domain__server').order_by('id').all()]
+
+    else:
+        if not text:
+            query = [item async for item in
+                     Domain.objects.filter(status=order_by).select_related('server', 'redirect_domain__server').order_by(
+                         'id').all()]
+        else:
+            query = [item async for item in
+                     Domain.objects.filter(status=order_by,current_domain__icontains=text).select_related('server',
+                                                                           'redirect_domain__server').order_by(
+                         'id').all()]
+
+    all_domain = [await domains(item) for item in query]
 
     count_domain = len(all_domain)
-    paginator = Paginator(all_domain, 6)
+    per_page = request.GET.get("per_page", 6)
+    paginator = Paginator(all_domain, per_page)
     page_number = request.GET.get("page", 1)
     paginated_all_domain = paginator.get_page(page_number)
 
@@ -356,7 +388,8 @@ async def get_all_server(request: HttpRequest):
     servers = [await all_servers(item) async for item in Server.objects.order_by('id').all()]
 
     count_page = len(servers)
-    paginator = Paginator(servers, 6)
+    per_page = request.GET.get("per_page", 6)
+    paginator = Paginator(servers, per_page)
     page_number = request.GET.get("page", 1)
     paginated_all_server = paginator.get_page(page_number)
 

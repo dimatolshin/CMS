@@ -16,13 +16,6 @@ class Person(models.Model):
         return f'user_id:{self.user.id}, user_name:{self.user.name}'
 
 
-class Vebmaster(models.Model):
-    name = models.IntegerField()
-
-    def __str__(self):
-        return f'name:{self.name}'
-
-
 class Site(models.Model):
     shablon_name = models.CharField(verbose_name='Имя Шаблона', default='1WIN')
     title = models.CharField(default="""
@@ -99,6 +92,8 @@ class Domain(models.Model):
     server = models.ForeignKey(Server, on_delete=models.SET_NULL, null=True, blank=True, related_name='domain')
     status = models.CharField()
     redirect_domain = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='main_domain')
+    yandex_metrika = models.BigIntegerField(null=True, blank=True, verbose_name='Яндех Метрика')
+    vebmaster_id = models.CharField(null=True,blank=True,verbose_name='Вебмастер')
     create_data = models.DateTimeField(default=get_moscow_time)
     update_data = models.DateTimeField(default=get_moscow_time)
 

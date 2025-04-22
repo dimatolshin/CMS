@@ -19,10 +19,6 @@ class CustomUserAdmin(UserAdmin):
     # inlines = [PersonInline]
 
 
-@admin.register(Vebmaster)
-class VebmasterAdmin(admin.ModelAdmin):
-    pass
-
 
 @admin.register(Site)
 class SiteAdmin(admin.ModelAdmin):
