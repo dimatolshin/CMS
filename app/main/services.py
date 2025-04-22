@@ -48,7 +48,7 @@ async def custom_domain_name(item):
     return {
         'id': item.id,
         'value': item.current_domain,
-        'disabled':False if item.status=='Заблокирован' else True,
+        'disabled':True if item.status=='Заблокирован' else False,
         'content': item.current_domain,
     }
 
@@ -57,7 +57,7 @@ async def custom_server(item):
     return {
         'id': item.id,
         'value': item.ip,
-        'disabled': False if item.status == 'Заблокирован' else True,
+        'disabled': True if item.status == 'Заблокирован' else False,
         'content': item.ip,
     }
 
