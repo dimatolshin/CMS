@@ -371,7 +371,7 @@ async def get_all_domain(request: HttpRequest):
 
         if text:
             query = [item async for item in
-                     Domain.objects.filter(current_domain__icontains=text).select_related('server',
+                     Domain.objects.filter(current_domain__icontains=text,status=order_by).select_related('server',
                                                                                           'redirect_domain__server').order_by(
                          'id').all()]
             count = len(query)
