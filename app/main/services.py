@@ -208,6 +208,26 @@ async def create_cloud_fire_txt(zone_id,domain_name,yandex_metrika):
     return requests.post(base_url, headers=headers, json=data)
 
 
+async def setting_full(zone_id):
+    base_url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/settings/ssl"
+    headers = {
+        "X-Auth-Email": os.getenv('CLOUDFLARE_EMAIL'),
+        "X-Auth-Key": os.getenv('CLOUDFLARE_API_KEY'),
+        "Content-Type": "application/json"
+    }
+
+    params = {
+        "value": "full"
+    }
+
+    response = requests.patch(
+        url=base_url,
+        headers=headers,
+        json=params
+    )
+
+    response.raise_for_status()
+
 async def check_cloud_fire(zone_id,ip,type,domain_name,dop=''):
     try:
         base_url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records"

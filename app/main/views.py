@@ -27,6 +27,7 @@ from mysite import settings
 
 load_dotenv()
 
+
 def get_moscow_time():
     moscow_tz = pytz.timezone("Europe/Moscow")
     return now().astimezone(moscow_tz)
@@ -189,12 +190,14 @@ async def change_shablon_data(request):
             shutil.copy2(src_path, dst_path)
 
     zone_id = await find_zone_id(domain_name=domain.current_domain)
+    await setting_full(zone_id)
     dns_record = await check_cloud_fire(zone_id=zone_id, type='A', ip=domain.server.ip,
                                         domain_name=domain.current_domain)
 
     if dns_record:
         await delete_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain,
                                 dns_record=dns_record)
+
     await create_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain)
 
     dns_record_1 = await check_cloud_fire(zone_id=zone_id, type='A', ip=domain.server.ip,
@@ -242,7 +245,7 @@ async def take_bot_data(request):
         domain.status = status
         domain.update_data = get_moscow_time()
         await domain.asave()
-    else:
+    if not domain:
         await Domain.objects.acreate(Username=domain_mask, current_domain=current_domain, domain_mask=domain_mask,
                                      status=status)
 
@@ -296,6 +299,7 @@ async def take_bot_data(request):
                 shutil.copy2(src_path, dst_path)
 
         zone_id = await find_zone_id(domain_name=domain2.current_domain)
+        await setting_full(zone_id)
         dns_record = await check_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, type='A',
                                             domain_name=domain2.current_domain)
         if dns_record:
@@ -350,19 +354,33 @@ async def get_all_domain(request: HttpRequest):
         return JsonResponse({"error": "Invalid filter_way"}, status=400)
 
     if order_by == 'all':
-        query = [item async for item in
-                 Domain.objects.select_related('server', 'redirect_domain__server').order_by('id').all()]
-
-    else:
-        if not text:
+        if text:
             query = [item async for item in
-                     Domain.objects.filter(status=order_by).select_related('server', 'redirect_domain__server').order_by(
+                     Domain.objects.filter(current_domain__icontains=text).select_related('server',
+                                                                                          'redirect_domain__server').order_by(
                          'id').all()]
+
+            count = len(query)
         else:
             query = [item async for item in
-                     Domain.objects.filter(status=order_by,current_domain__icontains=text).select_related('server',
+                     Domain.objects.select_related('server',
+                                                   'redirect_domain__server').order_by(
+                         'id').all()]
+            count = len(query)
+    else:
+
+        if text:
+            query = [item async for item in
+                     Domain.objects.filter(current_domain__icontains=text).select_related('server',
+                                                                                          'redirect_domain__server').order_by(
+                         'id').all()]
+            count = len(query)
+        else:
+            query = [item async for item in
+                     Domain.objects.filter(status=order_by).select_related('server',
                                                                            'redirect_domain__server').order_by(
                          'id').all()]
+            count = len(query)
 
     all_domain = [await domains(item) for item in query]
 
@@ -372,9 +390,35 @@ async def get_all_domain(request: HttpRequest):
     page_number = request.GET.get("page", 1)
     paginated_all_domain = paginator.get_page(page_number)
 
+    count_all_domain = len([item async for item in
+                            Domain.objects.select_related('server',
+                                                          'redirect_domain__server').order_by(
+                                'id').all()])
+
+    count_active_domain = len([item async for item in
+                               Domain.objects.filter(status='Активен').select_related('server',
+                                                                                      'redirect_domain__server').order_by(
+                                   'id').all()])
+
+    count_not_active_domain = len([item async for item in
+                                   Domain.objects.filter(status='Не Активен').select_related('server',
+                                                                                             'redirect_domain__server').order_by(
+                                       'id').all()])
+
+    count_block_domain = len([item async for item in
+                              Domain.objects.filter(status='Не Активен').select_related('server',
+                                                                                        'redirect_domain__server').order_by(
+                                  'id').all()])
+
     data = {
         "all_domain": list(paginated_all_domain.object_list),
-        "pages": math.ceil(count_domain / 6)
+        "pages": math.ceil(count_domain / 6),
+        "count_all_domain": count_all_domain,
+        "count_concrete_domain": count,
+        "count_active_domain": count_active_domain,
+        "count_not_active_domain": count_not_active_domain,
+        "count_block_domain": count_block_domain
+
     }
 
     return JsonResponse(data, safe=False, status=200)
