@@ -406,8 +406,8 @@ async def get_all_domain(request: HttpRequest):
                                        'id').all()])
 
     count_block_domain = len([item async for item in
-                              Domain.objects.filter(status='Не Активен').select_related('server',
-                                                                                        'redirect_domain__server').order_by(
+                              Domain.objects.filter(status='Заблокирован').select_related('server',
+                                                                                          'redirect_domain__server').order_by(
                                   'id').all()])
 
     data = {
