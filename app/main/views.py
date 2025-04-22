@@ -27,6 +27,10 @@ from mysite import settings
 
 load_dotenv()
 
+def get_moscow_time():
+    moscow_tz = pytz.timezone("Europe/Moscow")
+    return now().astimezone(moscow_tz)
+
 
 class LoginView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
@@ -159,6 +163,7 @@ async def change_shablon_data(request):
 
     domain.server.status = 'Активен'
     domain.Username = site.name_of_site
+    domain.update_data = get_moscow_time()
     await domain.asave()
 
     html_content = await sync_to_async(render_to_string)(f'{shablon_name}.html', {'site': site})
@@ -186,6 +191,7 @@ async def change_shablon_data(request):
     zone_id = await find_zone_id(domain_name=domain.current_domain)
     dns_record = await check_cloud_fire(zone_id=zone_id, type='A', ip=domain.server.ip,
                                         domain_name=domain.current_domain)
+
     if dns_record:
         await delete_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain,
                                 dns_record=dns_record)
@@ -234,6 +240,7 @@ async def take_bot_data(request):
 
     if domain:
         domain.status = status
+        domain.update_data = get_moscow_time()
         await domain.asave()
     else:
         await Domain.objects.acreate(Username=domain_mask, current_domain=current_domain, domain_mask=domain_mask,
