@@ -91,14 +91,17 @@ async def test_point(request):
 @site_authenticated
 async def get_shablon_data(request):
     shablon_name = request.data.get('shablon_name')
-    domain_id = request.data.get('domain_id')
+    current_domain = request.data.get('current_domain')
 
-    if not domain_id:
-        site = await Site.objects.filter(shablon_name=shablon_name).select_related('domain_name',
+    if not current_domain:
+        site = await Site.objects.filter(shablon_name=shablon_name.upper()).select_related('domain_name',
                                                                                    'server').afirst()
-    if domain_id:
-        site = await Site.objects.filter(domain_name__id=domain_id).select_related('domain_name',
+    if current_domain:
+        site = await Site.objects.filter(shablon_name=current_domain).select_related('domain_name',
                                                                                    'server').afirst()
+        if not site:
+            site = await Site.objects.filter(shablon_name=shablon_name.upper()).select_related('domain_name',
+                                                                                               'server').afirst()
 
     data = await serverdata(site)
 
@@ -151,9 +154,15 @@ async def change_shablon_data(request):
             update_fields[field] = data[field]
 
     if update_fields:
-        await Site.objects.filter(shablon_name=shablon_name).aupdate(**update_fields)
+        site= await Site.objects.filter(shablon_name=update_fields['domain_name'].current_domain).select_related('domain_name',
+                                                                               'server').afirst()
+        if site:
+            await Site.objects.filter(shablon_name=update_fields['domain_name'].current_domain).aupdate(**update_fields)
 
-    site = await Site.objects.filter(shablon_name=shablon_name).select_related('domain_name',
+        else:
+            await Site.objects.acreate(**update_fields,shablon_name= update_fields['domain_name'].current_domain)
+
+    site = await Site.objects.filter(shablon_name=update_fields['domain_name'].current_domain).select_related('domain_name',
                                                                                'server').afirst()
 
     domain = await Domain.objects.filter(current_domain=site.domain_name.current_domain).select_related(
@@ -162,7 +171,6 @@ async def change_shablon_data(request):
     domain.status = 'Активен'
     domain.yandex_metrika = site.yandex_metrika
 
-    domain.server.status = 'Активен'
     domain.Username = site.name_of_site
     domain.update_data = get_moscow_time()
     await domain.asave()

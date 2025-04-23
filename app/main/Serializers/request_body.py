@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 class ShablonName(serializers.Serializer):
     shablon_name=serializers.CharField()
-    domain_id= serializers.IntegerField()
+    current_domain= serializers.CharField()
 
 
 class ChangeSite(serializers.Serializer):
