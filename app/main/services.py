@@ -72,6 +72,13 @@ async def data_blocklist(item):
         'image': item.get('image'),
     }
 
+async def faq(item):
+    return {
+        'id':item.get('id'),
+        'title': item.get('title'),
+        'description': item.get('description')
+    }
+
 
 async def meta_teg_list(item):
     return {
@@ -96,6 +103,7 @@ async def serverdata(site):
         "name_of_site": site.name_of_site if site else None,
         "main_link": site.main_link if site else None,
         "yandex_metrika": site.yandex_metrika if site else None,
+        "faq":[await faq(item) for item in site.faq],
         "promo_code": site.promo_code if site else None,
         "create_data": site.create_data if site else None,
     }

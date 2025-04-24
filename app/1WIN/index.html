@@ -2,16 +2,16 @@
 <html amp lang="ru">
   <head>
     <meta charset="utf-8" />
-    <title>None</title>
+    <title>POKERDOM</title>
     <link
       rel="canonical"
       href="https://amp.dev/ru/documentation/guides-and-tutorials/start/create/basic_markup/"
     />
-    <link rel="icon" type="image/svg+xml" href="favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="https://api.gang-soft.com/media/favicon.ico" />
     
       <meta
         name = "description"
-        content="TEST"
+        content=""
       />
     
 
@@ -22,6 +22,8 @@
       rel="stylesheet"
     />
       
+
+<script type="application/ld+json"> {'@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': []}  </script>
 
     <meta name="viewport" content="width=device-width" />
     <script type="application/ld+json">
@@ -109,7 +111,7 @@
             try {
               const originalText = textBlock.textContent;
               await navigator.clipboard.writeText(originalText);
-              textBlock.textContent = "Скопировано!";
+              textBlock.textContent = "Успех!";
 
               // Возвращаем исходный текст через 2 секунды
               setTimeout(() => {
@@ -153,6 +155,9 @@
 
             <div class="right">
                 
+              <p class="bonus_text">ПО ПРОМОКОДУ</p>
+              <p id="textToCopy" class="bonus_text green">1111112</p>
+                
             </div>
           </div>
           <div class="prize_block">
@@ -170,22 +175,35 @@
             <button id="scrollButton" class="btn">ЗАБРАТЬ</button>
           </div>
         </div>
-        <img
-          loading="lazy"
-          class="main_img"
-          src="https://api.gang-soft.com/media/1win_1.png"
-          alt=""
-        />
-         
-
+        <div class="box">
+            <img
+              loading="lazy"
+              class="main_img"
+              src="https://api.gang-soft.com/media/1win_1.png"
+              alt=""
+            />
+             
+        </div>
+            <div class="container">
+                <h2 class="about__title title">Содержание</h2>
+                <ol class="list-block">
+                    
+                        
+                          <li >
+                            <a href="#Hello">Hello</a>
+                          </li>
+                        
+                    
+                </ol>
+            </div>
 
       
-        <section class="about section--offset">
+        <section id="Hello" class="about section--offset">
           <div class="container">
             <div class="about__block">
 
               
-                <h2 class="about__title title">О компании</h2>
+                <h2 class="about__title title">Hello</h2>
               
 
               
@@ -210,6 +228,8 @@
           </div>
         </section>
       
+        
+
 
     </main>
   </body>

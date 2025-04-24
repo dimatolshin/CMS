@@ -50,3 +50,14 @@ ul {
 ul li::marker {
   color: #377bbb;
 }
+ ol {
+   display: flex;
+   flex-direction: column;
+   gap: 5px;
+
+  padding-left: 20px;
+}
+ol li {
+  font-weight: 500;
+  font-size: 21px;
+}

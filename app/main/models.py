@@ -41,7 +41,7 @@ class Site(models.Model):
         'content':'',
     }])
     faq= models.JSONField(verbose_name='Вопросы Ответы',null=True, blank=True , default=[{
-        'id': '',
+        'id': '1',
         'title':'Вопрос',
         'description':'Ответ'
     }])

@@ -165,6 +165,25 @@ async def change_shablon_data(request):
     site = await Site.objects.filter(shablon_name=update_fields['domain_name'].current_domain).select_related('domain_name',
                                                                                'server').afirst()
 
+    faq={
+
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": item['title'],
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item['description']
+      }
+    }for item in site.faq
+  ]
+}
+    script = f'<script type="application/ld+json"> {faq}  </script>'
+
+    print(script)
+
     domain = await Domain.objects.filter(current_domain=site.domain_name.current_domain).select_related(
         'server').afirst()
     domain.server = site.server
@@ -175,7 +194,7 @@ async def change_shablon_data(request):
     domain.update_data = get_moscow_time()
     await domain.asave()
 
-    html_content = await sync_to_async(render_to_string)(f'{shablon_name}.html', {'site': site})
+    html_content = await sync_to_async(render_to_string)(f'{shablon_name}.html', {'site': site,'script':script})
 
     os.makedirs(f'{shablon_name}', exist_ok=True)
 

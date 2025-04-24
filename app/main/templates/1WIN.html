@@ -39,6 +39,8 @@
    </script>
        {% endif %}
 
+{{ script| safe }}
+
     <meta name="viewport" content="width=device-width" />
     <script type="application/ld+json">
       {
@@ -199,19 +201,32 @@
             <button id="scrollButton" class="btn">ЗАБРАТЬ</button>
           </div>
         </div>
-        <img
-          loading="lazy"
-          class="main_img"
-          src="https://api.gang-soft.com/media/1win_1.png"
-          alt=""
-        />
-         {% if site.link_for_site and site.title_button %}
-        <a id="link_for_site" class="btn_link" href="{{site.link_for_site}}">{{site.title_button}}</a>
-        {% endif %}
-
+        <div class="box">
+            <img
+              loading="lazy"
+              class="main_img"
+              src="https://api.gang-soft.com/media/1win_1.png"
+              alt=""
+            />
+             {% if site.link_for_site and site.title_button %}
+            <a id="link_for_site" class="btn_link" href="{{site.link_for_site}}">{{site.title_button}}</a>
+            {% endif %}
+        </div>
+            <div class="container">
+                <h2 class="about__title title">Содержание</h2>
+                <ol class="list-block">
+                    {% for item in site.data_block %}
+                        {% if item.title %}
+                          <li >
+                            <a href="#{{ item.title }}">{{ item.title }}</a>
+                          </li>
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+            </div>
 
       {% for item in site.data_block %}
-        <section class="about section--offset">
+        <section id="{{ item.title }}" class="about section--offset">
           <div class="container">
             <div class="about__block">
 
@@ -249,6 +264,21 @@
           </div>
         </section>
       {% endfor %}
+        {% if site.faq %}
+         <div class="container">
+        <h2 class="about__title title">Ответы на часто задаваемые вопросы</h2>
+        <ol class="list-block">
+            {% for item in site.faq %}
+              <li>
+                  <h3>{{ item.title }}</h3>
+                <p class="list_text">{{ item.description }}</p>
+                  <div class="line"></div>
+              </li>
+            {% endfor %}
+        </ol>
+      </div>
+        {% endif %}
+
 
     </main>
   </body>
