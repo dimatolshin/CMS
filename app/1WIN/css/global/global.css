@@ -1,4 +1,4 @@
- @import url(../blocks/header/header.css);
+@import url(../blocks/header/header.css);
 @import url(../blocks/bonus/bonus.css);
 @import url(../blocks/list-info/list-info.css);
 @import url(../blocks/figure-info/figure-info.css);
@@ -8,7 +8,7 @@ body {
   background-color: #090f1e;
 }
 .section--offset {
-  padding-top: 50px;
+  margin-bottom: 50px;
 }
 .link {
   padding: 13px 40px;

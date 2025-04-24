@@ -19,6 +19,7 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 import shutil
+import json
 
 from .Serializers import request_body, response_serializer
 from .models import *
@@ -95,10 +96,10 @@ async def get_shablon_data(request):
 
     if not current_domain:
         site = await Site.objects.filter(shablon_name=shablon_name.upper()).select_related('domain_name',
-                                                                                   'server').afirst()
+                                                                                           'server').afirst()
     if current_domain:
         site = await Site.objects.filter(shablon_name=current_domain).select_related('domain_name',
-                                                                                   'server').afirst()
+                                                                                     'server').afirst()
         if not site:
             site = await Site.objects.filter(shablon_name=shablon_name.upper()).select_related('domain_name',
                                                                                                'server').afirst()
@@ -154,33 +155,35 @@ async def change_shablon_data(request):
             update_fields[field] = data[field]
 
     if update_fields:
-        site= await Site.objects.filter(shablon_name=update_fields['domain_name'].current_domain).select_related('domain_name',
-                                                                               'server').afirst()
+        site = await Site.objects.filter(shablon_name=update_fields['domain_name'].current_domain).select_related(
+            'domain_name',
+            'server').afirst()
         if site:
             await Site.objects.filter(shablon_name=update_fields['domain_name'].current_domain).aupdate(**update_fields)
 
         else:
-            await Site.objects.acreate(**update_fields,shablon_name= update_fields['domain_name'].current_domain)
+            await Site.objects.acreate(**update_fields, shablon_name=update_fields['domain_name'].current_domain)
 
-    site = await Site.objects.filter(shablon_name=update_fields['domain_name'].current_domain).select_related('domain_name',
-                                                                               'server').afirst()
+    site = await Site.objects.filter(shablon_name=update_fields['domain_name'].current_domain).select_related(
+        'domain_name',
+        'server').afirst()
 
-    faq={
+    faq = {
 
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": item['title'],
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item['description']
-      }
-    }for item in site.faq
-  ]
-}
-    script = f'<script type="application/ld+json"> {faq}  </script>'
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": item['title'],
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": item['description']
+                }
+            } for item in site.faq
+        ]
+    }
+    script = f"<script type='application/ld+json'>{json.dumps(faq, ensure_ascii=False, separators=(',', ':'))}</script>"
 
     print(script)
 
@@ -194,7 +197,7 @@ async def change_shablon_data(request):
     domain.update_data = get_moscow_time()
     await domain.asave()
 
-    html_content = await sync_to_async(render_to_string)(f'{shablon_name}.html', {'site': site,'script':script})
+    html_content = await sync_to_async(render_to_string)(f'{shablon_name}.html', {'site': site, 'script': script})
 
     os.makedirs(f'{shablon_name}', exist_ok=True)
 
@@ -216,31 +219,34 @@ async def change_shablon_data(request):
             os.makedirs(os.path.dirname(dst_path), exist_ok=True)
             shutil.copy2(src_path, dst_path)
 
-    zone_id = await find_zone_id(domain_name=domain.current_domain)
-    await setting_full(zone_id)
+    zone_id = await find_zone_id(domain_name=domain.current_domain, name_server=shablon_name)
+    await setting_full(zone_id, name_server=shablon_name)
     dns_record = await check_cloud_fire(zone_id=zone_id, type='A', ip=domain.server.ip,
-                                        domain_name=domain.current_domain)
+                                        domain_name=domain.current_domain, name_server=shablon_name)
 
     if dns_record:
         await delete_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain,
-                                dns_record=dns_record)
+                                dns_record=dns_record, name_server=shablon_name)
 
-    await create_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain)
+    await create_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain,
+                            name_server=shablon_name)
 
     dns_record_1 = await check_cloud_fire(zone_id=zone_id, type='A', ip=domain.server.ip,
-                                          domain_name=domain.current_domain,
+                                          domain_name=domain.current_domain, name_server=shablon_name,
                                           dop='www.')
     if dns_record_1:
         await delete_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain,
-                                dns_record=dns_record_1, dop='www.')
-    await create_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain, dop='www.')
+                                dns_record=dns_record_1, name_server=shablon_name, dop='www.')
+    await create_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain,
+                            name_server=shablon_name, dop='www.')
 
-    dns_record_2 = await check_cloud_fire(zone_id=zone_id, ip=domain.server.ip, type='TXT',
+    dns_record_2 = await check_cloud_fire(zone_id=zone_id, ip=domain.server.ip, type='TXT', name_server=shablon_name,
                                           domain_name=domain.current_domain)
     if dns_record_2:
         await delete_cloud_fire(zone_id=zone_id, ip=domain.server.ip, domain_name=domain.current_domain,
-                                dns_record=dns_record_2)
-    await create_cloud_fire_txt(zone_id=zone_id, domain_name=domain.current_domain, yandex_metrika=site.yandex_metrika)
+                                dns_record=dns_record_2, name_server=shablon_name)
+    await create_cloud_fire_txt(zone_id=zone_id, domain_name=domain.current_domain, yandex_metrika=site.yandex_metrika,
+                                name_server=shablon_name)
 
     return JsonResponse({'Info': 'Success'}, status=200)
 
@@ -262,7 +268,6 @@ async def take_bot_data(request):
     current_domain_2 = request.data.get('current_domain_2')
     domain_mask_2 = request.data.get('domain_mask_2')
     status_2 = request.data.get('status_2')
-
     if not current_domain or not domain_mask or not status:
         return JsonResponse({'Error': 'Data uncorrect'}, status=404)
 
@@ -325,33 +330,41 @@ async def take_bot_data(request):
                 # Обычное копирование для остальных файлов
                 shutil.copy2(src_path, dst_path)
 
-        zone_id = await find_zone_id(domain_name=domain2.current_domain)
-        await setting_full(zone_id)
+        zone_id = await find_zone_id(domain_name=domain2.current_domain, name_server=domain_mask_2.upper())
+        await setting_full(zone_id, name_server=domain_mask_2.upper())
         dns_record = await check_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, type='A',
+                                            name_server=domain_mask_2.upper(),
                                             domain_name=domain2.current_domain)
         if dns_record:
             await delete_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,
+                                    name_server=domain_mask_2.upper(),
                                     dns_record=dns_record)
-        await create_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain)
+        await create_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,
+                                name_server=domain_mask_2.upper())
 
         dns_record_1 = await check_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, type='A',
+                                              name_server=domain_mask_2.upper(),
                                               domain_name=domain2.current_domain, dop='www.')
         if dns_record_1:
             await delete_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,
+                                    name_server=domain_mask_2.upper(),
                                     dns_record=dns_record_1, dop='www.')
-        await create_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain, dop='www.')
+        await create_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,
+                                name_server=domain_mask_2.upper(), dop='www.')
 
         dns_record_2 = await check_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, type='TXT',
+                                              name_server=domain_mask_2.upper(),
                                               domain_name=domain2.current_domain)
         if dns_record_2:
             await delete_cloud_fire(zone_id=zone_id, ip=domain2.server.ip, domain_name=domain2.current_domain,
+                                    name_server=domain_mask_2.upper(),
                                     dns_record=dns_record_2)
 
         yandex_metrika = (
             await domain2.site_domain.afirst()).yandex_metrika if await domain2.site_domain.aexists() else None
 
         await create_cloud_fire_txt(zone_id=zone_id, domain_name=domain2.current_domain,
-                                    yandex_metrika=yandex_metrika)
+                                    yandex_metrika=yandex_metrika, name_server=domain_mask_2.upper())
 
         return JsonResponse({'Info': 'Success'}, status=200)
 
@@ -398,8 +411,8 @@ async def get_all_domain(request: HttpRequest):
 
         if text:
             query = [item async for item in
-                     Domain.objects.filter(current_domain__icontains=text,status=order_by).select_related('server',
-                                                                                          'redirect_domain__server').order_by(
+                     Domain.objects.filter(current_domain__icontains=text, status=order_by).select_related('server',
+                                                                                                           'redirect_domain__server').order_by(
                          'id').all()]
             count = len(query)
         else:

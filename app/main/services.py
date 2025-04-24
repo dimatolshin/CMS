@@ -157,11 +157,11 @@ async def all_servers(item):
     }
 
 
-async def find_zone_id(domain_name):
+async def find_zone_id(domain_name,name_server):
     base_url = "https://api.cloudflare.com/client/v4/zones"
     headers = {
-        "X-Auth-Email": os.getenv('CLOUDFLARE_EMAIL'),
-        "X-Auth-Key": os.getenv('CLOUDFLARE_API_KEY'),
+        "X-Auth-Email": os.getenv(f'CLOUDFLARE_EMAIL_{name_server}'),
+        "X-Auth-Key": os.getenv(f'CLOUDFLARE_API_KEY_{name_server}'),
         "Content-Type": "application/json"
     }
 
@@ -181,12 +181,12 @@ async def find_zone_id(domain_name):
     return data['result'][0]['id']
 
 
-async def create_cloud_fire(zone_id,ip,domain_name,dop=''):
+async def create_cloud_fire(zone_id,ip,domain_name,name_server,dop=''):
     base_url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records"
     headers = {
         'Content-Type': 'application/json',
-        'X-Auth-Email': os.getenv('CLOUDFLARE_EMAIL'),
-        'X-Auth-Key': os.getenv('CLOUDFLARE_API_KEY')
+        'X-Auth-Email': os.getenv(f'CLOUDFLARE_EMAIL_{name_server}'),
+        'X-Auth-Key': os.getenv(f'CLOUDFLARE_API_KEY_{name_server}')
     }
     data = {
         "comment": "Domain verification record",
@@ -198,12 +198,12 @@ async def create_cloud_fire(zone_id,ip,domain_name,dop=''):
     }
     return requests.post(base_url, headers=headers, json=data)
 
-async def create_cloud_fire_txt(zone_id,domain_name,yandex_metrika):
+async def create_cloud_fire_txt(zone_id,domain_name,yandex_metrika,name_server):
     base_url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records"
     headers = {
         'Content-Type': 'application/json',
-        'X-Auth-Email': os.getenv('CLOUDFLARE_EMAIL'),
-        'X-Auth-Key': os.getenv('CLOUDFLARE_API_KEY')
+        'X-Auth-Email': os.getenv(f'CLOUDFLARE_EMAIL_{name_server}'),
+        'X-Auth-Key': os.getenv(f'CLOUDFLARE_API_KEY_{name_server}')
     }
     data = {
         "comment": "Domain verification record",
@@ -216,11 +216,11 @@ async def create_cloud_fire_txt(zone_id,domain_name,yandex_metrika):
     return requests.post(base_url, headers=headers, json=data)
 
 
-async def setting_full(zone_id):
+async def setting_full(zone_id,name_server):
     base_url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/settings/ssl"
     headers = {
-        "X-Auth-Email": os.getenv('CLOUDFLARE_EMAIL'),
-        "X-Auth-Key": os.getenv('CLOUDFLARE_API_KEY'),
+        "X-Auth-Email": os.getenv(f'CLOUDFLARE_EMAIL_{name_server}'),
+        "X-Auth-Key": os.getenv(f'CLOUDFLARE_API_KEY_{name_server}'),
         "Content-Type": "application/json"
     }
 
@@ -236,14 +236,14 @@ async def setting_full(zone_id):
 
     response.raise_for_status()
 
-async def check_cloud_fire(zone_id,ip,type,domain_name,dop=''):
+async def check_cloud_fire(zone_id,ip,type,domain_name,name_server,dop=''):
     try:
         base_url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records"
 
         headers = {
             'Content-Type': 'application/json',
-            'X-Auth-Email': os.getenv('CLOUDFLARE_EMAIL'),
-            'X-Auth-Key': os.getenv('CLOUDFLARE_API_KEY')
+            'X-Auth-Email': os.getenv(f'CLOUDFLARE_EMAIL_{name_server}'),
+            'X-Auth-Key': os.getenv(f'CLOUDFLARE_API_KEY_{name_server}')
         }
         params = {
             "name": f'{dop}{domain_name}',
@@ -258,12 +258,12 @@ async def check_cloud_fire(zone_id,ip,type,domain_name,dop=''):
     except Exception:
         return False
 
-async def delete_cloud_fire(zone_id,ip,domain_name,dns_record,dop=''):
+async def delete_cloud_fire(zone_id,ip,domain_name,dns_record,name_server,dop=''):
     base_url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records/{dns_record}"
 
     headers = {
         'Content-Type': 'application/json',
-        'X-Auth-Email': os.getenv('CLOUDFLARE_EMAIL'),
-        'X-Auth-Key': os.getenv('CLOUDFLARE_API_KEY')
+        'X-Auth-Email': os.getenv(f'CLOUDFLARE_EMAIL_{name_server}'),
+        'X-Auth-Key': os.getenv(f'CLOUDFLARE_API_KEY_{name_server}')
     }
     requests.delete(base_url, headers=headers)

@@ -34,6 +34,8 @@
    </script>
        {% endif %}
 
+{{ script| safe }}
+
   <meta name="viewport" content="width=device-width" />
   <script type="application/ld+json">
       {
@@ -210,7 +212,8 @@
           {% endif %}
         </div>
       </div>
-      <div class="banner_box"><img loading="lazy" class="main_img" src="./assets/img/logo.png" alt="">
+      <div class="boxMargin">
+        <div class="banner_box"><img loading="lazy" class="main_img" src="./assets/img/logo.png" alt="">
         <p>Покердом</p>
       </div>
       {% if site.link_for_site and site.title_button %}
@@ -218,8 +221,21 @@
            <a id="link_for_site" class="btn_link" href="{{site.link_for_site}}">{{site.title_button}}</a>
         </div>
       {% endif %}
+      </div>
+      <div class="container info">
+                <h2 class="about__title title">Содержание</h2>
+                <ol class="list-block">
+                    {% for item in site.data_block %}
+                        {% if item.title %}
+                          <li >
+                            <a href="#{{ item.title }}">{{ item.title }}</a>
+                          </li>
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+            </div>
       {% for item in site.data_block %}
-        <section class="about section--offset">
+        <section class="about section--offset" id="{{ item.title }}">
           <div class="container">
             <div class="about__block">
               {% if item.title %}
@@ -253,6 +269,20 @@
           </div>
         </section>
       {% endfor %}
+      {% if site.faq %}
+         <div class="container">
+        <h2 class="about__title title">Ответы на часто задаваемые вопросы</h2>
+        <ol class="list-block">
+            {% for item in site.faq %}
+              <li>
+                  <h3>{{ item.title }}</h3>
+                <p class="list_text">{{ item.description }}</p>
+                  <div class="line"></div>
+              </li>
+            {% endfor %}
+        </ol>
+      </div>
+        {% endif %}
     </main>
   </div>
 </body>
