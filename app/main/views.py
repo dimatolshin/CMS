@@ -176,7 +176,6 @@ async def change_shablon_data(request):
     }
     script = f"<script type='application/ld+json'>{json.dumps(faq, ensure_ascii=False, separators=(',', ':'))}</script>"
 
-    print(script)
 
     domain = await Domain.objects.filter(current_domain=site.domain_name.current_domain).select_related(
         'server').afirst()
