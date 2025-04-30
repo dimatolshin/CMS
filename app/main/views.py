@@ -302,21 +302,21 @@ async def take_bot_data(request):
         with open(f'redirect_holder/index.html', 'w') as f:
             f.write(html_content)
 
-            with open(f'{domain_mask_2.upper()}/robots.txt', 'w') as f:
+            with open(f'static_sites/{current_domain}/robots.txt', 'w') as f:
                 f.write(f"""User-agent: *
-        Sitemap: https://{current_domain_2}/sitemap.xml""")
+Sitemap: https://{current_domain_2}/sitemap.xml""")
 
-            with open(f'{domain_mask_2.upper()}/sitemap.xml', 'w') as f:
+            with open(f'static_sites/{current_domain}/sitemap.xml', 'w') as f:
                 f.write(f"""<?xml version="1.0" encoding="UTF-8"?>
-            <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
-                <url>
-                    <loc>http://{current_domain_2}/index.html</loc>
-                    <lastmod>{date.today()}</lastmod>
-                    <changefreq>monthly</changefreq>
-                    <priority>1.0</priority>
-                </url>
-            </urlset>
-                """)
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
+        <url>
+            <loc>http://{current_domain_2}/index.html</loc>
+            <lastmod>{date.today()}</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>1.0</priority>
+        </url>
+    </urlset>
+        """)
 
         source_dir = f'static_sites/{domain.current_domain}'
 
