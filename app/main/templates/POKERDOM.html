@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html amp lang="ru">
+<html lang="ru">
 
 <head>
   <meta charset="utf-8" />
   <title>{{ site.name_of_site }}</title>
-  <link rel="canonical" href="https://amp.dev/ru/documentation/guides-and-tutorials/start/create/basic_markup/" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet" />
@@ -37,114 +36,6 @@
 {{ script| safe }}
 
   <meta name="viewport" content="width=device-width" />
-  <script type="application/ld+json">
-      {
-        "@context": "http://schema.org",
-        "@type": "NewsArticle",
-        "headline": "Open-source framework for publishing content",
-        "datePublished": "2015-10-07T12:02:41Z",
-        "image": ["logo.jpg"]
-      }
-    </script>
-  <style amp-boilerplate>
-    body {
-      -webkit-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
-      -moz-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
-      -ms-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
-      animation: -amp-start 8s steps(1, end) 0s 1 normal both;
-    }
-
-    @-webkit-keyframes -amp-start {
-      from {
-        visibility: hidden;
-      }
-
-      to {
-        visibility: visible;
-      }
-    }
-
-    @-moz-keyframes -amp-start {
-      from {
-        visibility: hidden;
-      }
-
-      to {
-        visibility: visible;
-      }
-    }
-
-    @-ms-keyframes -amp-start {
-      from {
-        visibility: hidden;
-      }
-
-      to {
-        visibility: visible;
-      }
-    }
-
-    @-o-keyframes -amp-start {
-      from {
-        visibility: hidden;
-      }
-
-      to {
-        visibility: visible;
-      }
-    }
-
-    @keyframes -amp-start {
-      from {
-        visibility: hidden;
-      }
-
-      to {
-        visibility: visible;
-      }
-    }
-  </style>
-  <noscript>
-    <style amp-boilerplate>
-      body {
-        -webkit-animation: none;
-        -moz-animation: none;
-        -ms-animation: none;
-        animation: none;
-      }
-    </style>
-  </noscript>
-  <script async src="https://cdn.ampproject.org/v0.js"></script>
-  <script>
-       document.addEventListener("DOMContentLoaded", () => {
-        const scrollButton = document.getElementById("scrollButton");
-        if (scrollButton) {
-          scrollButton.addEventListener("click", () => {
-            window.scrollTo({
-              top: document.body.scrollHeight,
-              behavior: "smooth",
-            });
-          });
-        }
-        const textBlock = document.getElementById("textToCopy");
-        if (textBlock) {
-          textBlock.addEventListener("click", async () => {
-            try {
-              const originalText = textBlock.textContent;
-              await navigator.clipboard.writeText(originalText);
-              textBlock.textContent = "Успех!";
-
-              setTimeout(() => {
-                textBlock.textContent = originalText;
-              }, 1000);
-            } catch (err) {
-              console.error('Ошибка при копировании: ', err);
-            }
-          });
-        }
-      });
-
-    </script>
 </head>
 
 <body>
@@ -207,8 +98,8 @@
 
           </div>
           {% if site.promo_code %}
-            <p id="textToCopy" class="prize_title">{{site.promo_code}}</p>
-            <button id="scrollButton" class="btn">ЗАБРАТЬ</button>
+            <p class="prize_title">{{site.promo_code}}</p>
+            <a href="{{site.main_link}}" class="btn">ЗАБРАТЬ</a>
           {% endif %}
         </div>
       </div>
