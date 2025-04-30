@@ -14,10 +14,7 @@
 
     <link rel="stylesheet" href="css/style.css" />
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
+
       {% if site.yandex_metrika %}
      <script type="text/javascript">
       (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -58,7 +55,7 @@
      <header>
         <a id="mainLink" class="logo" href="{{site.main_link}}">
           <div class="header">
-            <img src="https://api.gang-soft.com/media/logo.png" alt="logo" />
+            <img src="https://api.gang-soft.com/media/logo.png" loading="lazy" alt="logo" />
             <div class="mobile__inner">
               <a class="mobile__inner__link mobile__inner__link--green" href="{{site.main_link}}"
                 >Регистрация</a
@@ -87,7 +84,7 @@
           </div>
           <div class="prize_block">
             <div class="prize">
-              <img
+              <img loading="lazy"
                 class="img_gift"
                 src="https://api.gang-soft.com/media/img_gift.png"
                 alt="gift"
@@ -117,7 +114,7 @@
                     {% for item in site.data_block %}
                         {% if item.title %}
                           <li >
-                            <a href="#{{ item.title }}">{{ item.title }}</a>
+                            <a href="#{{ item.id }}">{{ item.title }}</a>
                           </li>
                         {% endif %}
                     {% endfor %}
@@ -125,7 +122,7 @@
             </nav>
 
       {% for item in site.data_block %}
-        <section id="{{ item.title }}" class="about section--offset">
+        <section id="{{ item.id }}" class="about section--offset">
           <div class="container">
             <div class="about__block">
 
@@ -146,7 +143,8 @@
 
               <div class="figure-info">
                 {% if item.image %}
-                  <img
+                  <img loading="lazy" width="1100"
+                    height="585"
                     src="{{ item.image }}"
                     alt="1win"
                     />

