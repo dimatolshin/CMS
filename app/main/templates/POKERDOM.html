@@ -222,7 +222,7 @@
         </div>
       {% endif %}
       </div>
-      <div class="container info">
+      <nav class="container info">
                 <h2 class="about__title title">Содержание</h2>
                 <ol class="list-block">
                     {% for item in site.data_block %}
@@ -233,7 +233,7 @@
                         {% endif %}
                     {% endfor %}
                 </ol>
-            </div>
+            </nav>
       {% for item in site.data_block %}
         <section class="about section--offset" id="{{ item.title }}">
           <div class="container">

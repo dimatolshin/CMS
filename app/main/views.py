@@ -1,23 +1,14 @@
-from django.shortcuts import render
-from psycopg2.extensions import JSONB
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.template.loader import render_to_string
 from drf_yasg.utils import swagger_auto_schema
 from adrf.decorators import api_view
 from django.http import HttpRequest, JsonResponse
-import os
-from asgiref.sync import sync_to_async
-import zipfile
-import base64
-from django.core.files.base import ContentFile
+
 from django.core.paginator import Paginator
 import math
-from datetime import timedelta
+from datetime import timedelta,date
 from pathlib import Path
-import requests
-from dotenv import load_dotenv
+
 import shutil
 import json
 
@@ -204,6 +195,23 @@ async def change_shablon_data(request):
     with open(f'{shablon_name}/index.html', 'w') as f:
         f.write(html_content)
 
+    with open(f'{shablon_name}/robots.txt', 'w') as f:
+        f.write(f"""User-agent: *
+Sitemap: https://{domain.current_domain}/sitemap.xml""")
+
+    with open(f'{shablon_name}/sitemap.xml', 'w') as f:
+        f.write(f"""<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
+        <url>
+            <loc>http://{domain.current_domain}/index.html</loc>
+            <lastmod>{date.today()}</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>1.0</priority>
+        </url>
+    </urlset>
+        """)
+
+
     target_dir = f'static_sites/{domain.current_domain}'
 
     Path(target_dir).mkdir(parents=True, exist_ok=True)
@@ -293,6 +301,22 @@ async def take_bot_data(request):
 
         with open(f'redirect_holder/index.html', 'w') as f:
             f.write(html_content)
+
+            with open(f'{domain_mask_2.upper()}/robots.txt', 'w') as f:
+                f.write(f"""User-agent: *
+        Sitemap: https://{current_domain_2}/sitemap.xml""")
+
+            with open(f'{domain_mask_2.upper()}/sitemap.xml', 'w') as f:
+                f.write(f"""<?xml version="1.0" encoding="UTF-8"?>
+            <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
+                <url>
+                    <loc>http://{current_domain_2}/index.html</loc>
+                    <lastmod>{date.today()}</lastmod>
+                    <changefreq>monthly</changefreq>
+                    <priority>1.0</priority>
+                </url>
+            </urlset>
+                """)
 
         source_dir = f'static_sites/{domain.current_domain}'
 

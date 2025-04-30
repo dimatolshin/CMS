@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://pokerdom_test.com/sitemap.xml

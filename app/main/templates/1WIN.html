@@ -212,7 +212,7 @@
             <a id="link_for_site" class="btn_link" href="{{site.link_for_site}}">{{site.title_button}}</a>
             {% endif %}
         </div>
-            <div class="container info">
+            <nav class="container info">
                 <h2 class="about__title title">Содержание</h2>
                 <ol class="list-block">
                     {% for item in site.data_block %}
@@ -223,7 +223,7 @@
                         {% endif %}
                     {% endfor %}
                 </ol>
-            </div>
+            </nav>
 
       {% for item in site.data_block %}
         <section id="{{ item.title }}" class="about section--offset">
