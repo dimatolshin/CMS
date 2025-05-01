@@ -8,6 +8,9 @@ from django.core.paginator import Paginator
 import math
 from datetime import timedelta,date
 from pathlib import Path
+import base64
+from io import BytesIO
+from PIL import Image
 
 import shutil
 import json
@@ -187,6 +190,35 @@ async def change_shablon_data(request):
     domain.update_data = get_moscow_time()
     await domain.asave()
 
+    target_dir = f'static_sites/{domain.current_domain}/media'
+
+    Path(target_dir).mkdir(parents=True, exist_ok=True)
+
+    for item in site.data_block:
+        if not item['image']:
+            continue  # Пропускаем, если нет изображения
+
+        # Извлекаем Base64 (удаляем префикс data:image/... если есть)
+        base64_data = item['image'].split(",")[1] if "," in item['image'] else item['image']
+
+        try:
+            # Декодируем Base64 в бинарные данные
+            image_data = base64.b64decode(base64_data)
+
+            # Открываем изображение с помощью Pillow
+            img = Image.open(BytesIO(image_data))
+
+            # Сохраняем в WebP (можно регулировать качество `quality=90`)
+            output_path = Path(target_dir) / f"{item['id']}.webp"
+            img.save(output_path, "WEBP", quality=90)  # quality от 1 до 100
+
+        except Exception as e:
+            return JsonResponse(
+                {"error": f"Ошибка при сохранении изображения {item['id']}: {e}"},
+                status=400
+            )
+
+
     html_content = await sync_to_async(render_to_string)(f'{shablon_name}.html', {'site': site, 'script': script})
 
     os.makedirs(f'{shablon_name}', exist_ok=True)
@@ -210,11 +242,7 @@ Sitemap: https://{domain.current_domain}/sitemap.xml""")
     </urlset>
         """)
 
-
     target_dir = f'static_sites/{domain.current_domain}'
-
-    Path(target_dir).mkdir(parents=True, exist_ok=True)
-
     # Копируем все файлы из шаблона в целевую папку
     for root, dirs, files in os.walk(f'{shablon_name}'):
         for file in files:
