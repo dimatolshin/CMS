@@ -81,6 +81,9 @@ img {
   box-shadow: inset 0 -7px 0 0 #526e1f;
   background: #79a430;
 }
+.footer {
+opacity: 0;
+}
 
 @media (max-width: 580px) {
   .btn_link {
@@ -95,3 +98,4 @@ img {
     margin-top: 15px;
   }
 }
+

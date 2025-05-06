@@ -91,8 +91,8 @@ async def meta_teg_list(item):
 async def serverdata(site):
     return {
         "id": site.id if site else None,
-        "domain_name": [await custom_domain_name(item) async for item in Domain.objects.all()],
-        "server": [await custom_server(item) async for item in Server.objects.all()],
+        "domain_name": site.domain_name.current_domain if site.domain_name else None,
+        "server":[await custom_server(item) async for item in Server.objects.all()],
         "shablon_name": site.shablon_name if site else None,
         "title": site.title if site else None,
         "description": site.description if site else None,

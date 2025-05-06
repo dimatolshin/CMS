@@ -109,6 +109,9 @@ img {
   display: flex;
   justify-content: center;
 }
+.footer {
+opacity: 0;
+}
 
 @media (max-width: 820px) {
   main {

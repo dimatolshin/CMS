@@ -142,7 +142,7 @@ async def change_shablon_data(request):
                 update_fields['server'] = server
 
         if 'domain_name' in data and data['domain_name']:
-            domain = await  Domain.objects.filter(current_domain=data['domain_name']).afirst()
+            domain = await  Domain.objects.filter(current_domain=data['domain_name'].strip()).afirst()
             if domain:
                 update_fields['domain_name'] = domain
         if field in data:
@@ -196,7 +196,7 @@ async def change_shablon_data(request):
 
     for item in site.data_block:
         if not item['image']:
-            continue  # Пропускаем, если нет изображения
+            continue  
 
         # Извлекаем Base64 (удаляем префикс data:image/... если есть)
         base64_data = item['image'].split(",")[1] if "," in item['image'] else item['image']
@@ -232,15 +232,15 @@ Sitemap: https://{domain.current_domain}/sitemap.xml""")
 
     with open(f'{shablon_name}/sitemap.xml', 'w') as f:
         f.write(f"""<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
-        <url>
-            <loc>http://{domain.current_domain}/index.html</loc>
-            <lastmod>{date.today()}</lastmod>
-            <changefreq>monthly</changefreq>
-            <priority>1.0</priority>
-        </url>
-    </urlset>
-        """)
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
+    <url>
+        <loc>https://{domain.current_domain}/index.html</loc>
+        <lastmod>{date.today()}</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+</urlset>
+    """)
 
     target_dir = f'static_sites/{domain.current_domain}'
     # Копируем все файлы из шаблона в целевую папку
@@ -335,15 +335,15 @@ Sitemap: https://{current_domain_2}/sitemap.xml""")
 
             with open(f'static_sites/{current_domain}/sitemap.xml', 'w') as f:
                 f.write(f"""<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
-        <url>
-            <loc>http://{current_domain_2}/index.html</loc>
-            <lastmod>{date.today()}</lastmod>
-            <changefreq>monthly</changefreq>
-            <priority>1.0</priority>
-        </url>
-    </urlset>
-        """)
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
+    <url>
+        <loc>https://{current_domain_2}/index.html</loc>
+        <lastmod>{date.today()}</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+</urlset>
+    """)
 
         source_dir = f'static_sites/{domain.current_domain}'
 
