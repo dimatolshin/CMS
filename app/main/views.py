@@ -234,7 +234,7 @@ Sitemap: https://{domain.current_domain}/sitemap.xml""")
         f.write(f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
     <url>
-        <loc>https://{domain.current_domain}/index.html</loc>
+        <loc>https://{domain.current_domain}/</loc>
         <lastmod>{date.today()}</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
