@@ -6,7 +6,7 @@ from django.http import HttpRequest, JsonResponse
 
 from django.core.paginator import Paginator
 import math
-from datetime import timedelta,date
+from datetime import timedelta, date
 from pathlib import Path
 import base64
 from io import BytesIO
@@ -179,7 +179,6 @@ async def change_shablon_data(request):
     }
     script = f"<script type='application/ld+json'>{json.dumps(faq, ensure_ascii=False, separators=(',', ':'))}</script>"
 
-
     domain = await Domain.objects.filter(current_domain=site.domain_name.current_domain).select_related(
         'server').afirst()
     domain.server = site.server
@@ -196,9 +195,9 @@ async def change_shablon_data(request):
 
     for item in site.data_block:
         if not item['image']:
-            continue  
+            continue
 
-        # Извлекаем Base64 (удаляем префикс data:image/... если есть)
+            # Извлекаем Base64 (удаляем префикс data:image/... если есть)
         base64_data = item['image'].split(",")[1] if "," in item['image'] else item['image']
 
         try:
@@ -217,7 +216,6 @@ async def change_shablon_data(request):
                 {"error": f"Ошибка при сохранении изображения {item['id']}: {e}"},
                 status=400
             )
-
 
     html_content = await sync_to_async(render_to_string)(f'{shablon_name}.html', {'site': site, 'script': script})
 
@@ -311,17 +309,28 @@ async def take_bot_data(request):
     if domain:
         domain.status = status
         domain.update_data = get_moscow_time()
+        site = await Site.objects.filter(shablon_name=current_domain).select_related('domain_name',
+                                                                                     'server').afirst()
         await domain.asave()
     if not domain:
         await Domain.objects.acreate(Username=domain_mask, current_domain=current_domain, domain_mask=domain_mask,
                                      status=status)
 
     if current_domain_2 and domain_mask_2 and status_2:
+
         await Domain.objects.acreate(Username=domain_mask_2, current_domain=current_domain_2, domain_mask=domain_mask_2,
                                      status=status_2, redirect_domain=domain, server=domain.server)
+
         domain2 = await Domain.objects.filter(current_domain=current_domain_2).select_related('server').afirst()
         domain.redirect_domain = domain2
         await domain.asave()
+        if site:
+            await Site.objects.acreate(shablon_name=current_domain_2, title=site.title, description=site.description,
+                                       title_button=site.title_button, link_for_site=site.link_for_site,
+                                       data_block=site.data_block, meta_teg=site.meta_teg, faq=site.faq,
+                                       domain_name=domain2, name_of_site=site.name_of_site, main_link=site.main_link,
+                                       yandex_metrika=site.yandex_metrika, promo_code=site.promo_code,
+                                       server=site.server)
         html_content = await sync_to_async(render_to_string)(f'redirect.html', {'current_domain_2': current_domain_2})
 
         os.makedirs(f'redirect_holder', exist_ok=True)
