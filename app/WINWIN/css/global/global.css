@@ -1,0 +1,62 @@
+@import url(../blocks/header/header.css);
+@import url(../blocks/list-info/list-info.css);
+@import url(../blocks/figure-info/figure-info.css);
+@import url(../blocks/bonus/bonus.css);
+body {
+  font-family: Roboto, Arial, sans-serif;
+  color: var(--white);
+  background-color: var(--bg-color);
+  min-width: 360px;
+}
+.section--offset {
+  padding-top: 50px;
+}
+:root {
+  --primary-color: #95db00;
+  --bg-color: #151515;
+  --color-text-primary: #000;
+  --color-line: #e2eaf2;
+  --white: #fff;
+  --black: #000;
+  --br-radius: 5px;
+  --prize-color: #3c3c3c;
+  --promo-title: #95db00;
+  --btn-secondary: #95db00;
+}
+h2 {
+  margin-bottom: 30px;
+  padding-left: 40px;
+  position: relative;
+  font-weight: 900;
+  font-style: italic;
+  font-size: 25px;
+  line-height: 143%;
+  letter-spacing: 0.04em;
+}
+h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 5px;
+  background-color: var(--primary-color);
+}
+ul {
+  margin-bottom: 20px;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+ul li::marker {
+  color: var(--primary-color);
+}
+ol {
+  padding-left: 20px;
+}
+ol li {
+  font-weight: 500;
+  font-size: 21px;
+}

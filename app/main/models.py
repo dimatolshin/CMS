@@ -9,8 +9,16 @@ def get_moscow_time():
     return now().astimezone(moscow_tz)
 
 
+# class Category_Access(models.Model):
+#     name = models.CharField()
+#
+#     def __str__(self):
+#         return f'id:{self.id}, name:{self.name}'
+
+
 class Person(models.Model):
     user = models.OneToOneField(User, related_name='person', on_delete=models.CASCADE)
+    # access = models.ManyToManyField(Category_Access,related_name='person_access',verbose_name='Доступы')
 
     def __str__(self):
         return f'user_id:{self.user.id}, user_name:{self.user.name}'
@@ -28,22 +36,22 @@ class Site(models.Model):
 Перейти на 1WIN
     """)
     link_for_site = models.CharField(verbose_name='Сслыка на заголовок продукта', null=True, blank=True)
-    data_block = models.JSONField(verbose_name='Блоки', null=True, blank=True,default= [{
-      'id': '',
-      'title': 'О компании',
-      'descr': '<p>Добро пожаловать на официальный сайт 1win casino. В 1 вин тебе повезет, даже если ты не новичок! И то, что ты попал на сайт 1win — твоя первая и главная победа! Врывайся в мир игровых слотов, и пусть удача сопутствует тебе. Игорные заведения — не только способ приятного времяпрепровождения, но и вероятность прилично поднять. Крути колесо и принимай удачу в гости! Счастливый билетик уже ждёт тебя на казино 1вин!</p>',
-      'btn_text': 'Перейти на 1WIN',
-      'btn_link': 'https://1wrefr.com/casino/list?open=register&sub1=clickid&sub2=dopid',
-      'image': '',
+    data_block = models.JSONField(verbose_name='Блоки', null=True, blank=True, default=[{
+        'id': '',
+        'title': 'О компании',
+        'descr': '<p>Добро пожаловать на официальный сайт 1win casino. В 1 вин тебе повезет, даже если ты не новичок! И то, что ты попал на сайт 1win — твоя первая и главная победа! Врывайся в мир игровых слотов, и пусть удача сопутствует тебе. Игорные заведения — не только способ приятного времяпрепровождения, но и вероятность прилично поднять. Крути колесо и принимай удачу в гости! Счастливый билетик уже ждёт тебя на казино 1вин!</p>',
+        'btn_text': 'Перейти на 1WIN',
+        'btn_link': 'https://1wrefr.com/casino/list?open=register&sub1=clickid&sub2=dopid',
+        'image': '',
     }])
-    meta_teg = models.JSONField(verbose_name='Мета теги', null=True, blank=True,default=[{
-        'id':'',
-        'content':'',
+    meta_teg = models.JSONField(verbose_name='Мета теги', null=True, blank=True, default=[{
+        'id': '',
+        'content': '',
     }])
-    faq= models.JSONField(verbose_name='Вопросы Ответы',null=True, blank=True , default=[{
+    faq = models.JSONField(verbose_name='Вопросы Ответы', null=True, blank=True, default=[{
         'id': '1',
-        'title':'Вопрос',
-        'description':'Ответ'
+        'title': 'Вопрос',
+        'description': 'Ответ'
     }])
 
     # Основная инфа
@@ -91,9 +99,10 @@ class Domain(models.Model):
     domain_mask = models.CharField()
     server = models.ForeignKey(Server, on_delete=models.SET_NULL, null=True, blank=True, related_name='domain')
     status = models.CharField()
-    redirect_domain = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='main_domain')
+    redirect_domain = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL,
+                                        related_name='main_domain')
     yandex_metrika = models.BigIntegerField(null=True, blank=True, verbose_name='Яндех Метрика')
-    vebmaster_id = models.CharField(null=True,blank=True,verbose_name='Вебмастер')
+    vebmaster_id = models.CharField(null=True, blank=True, verbose_name='Вебмастер')
     create_data = models.DateTimeField(default=get_moscow_time)
     update_data = models.DateTimeField(default=get_moscow_time)
 

