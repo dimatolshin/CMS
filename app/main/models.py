@@ -9,7 +9,7 @@ def get_moscow_time():
     return now().astimezone(moscow_tz)
 
 
-# class Category_Access(models.Model):
+# class CategoryAccess(models.Model):
 #     name = models.CharField()
 #
 #     def __str__(self):
@@ -18,7 +18,7 @@ def get_moscow_time():
 
 class Person(models.Model):
     user = models.OneToOneField(User, related_name='person', on_delete=models.CASCADE)
-    # access = models.ManyToManyField(Category_Access,related_name='person_access',verbose_name='Доступы')
+    # access = models.ManyToManyField(CategoryAccess,related_name='person_access',verbose_name='Доступы')
 
     def __str__(self):
         return f'user_id:{self.user.id}, user_name:{self.user.name}'

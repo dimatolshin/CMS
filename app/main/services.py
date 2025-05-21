@@ -147,13 +147,6 @@ async def all_servers(item):
         'status': item.status if item.status else None,
         'user': item.user if item.user else None,
         'password': item.password if item.password else None,
-        'skip': item.skip if item.skip else None,
-        'Cf_email': item.Cf_email if item.Cf_emailelse else None,
-        'Cf_key': item.Cf_key if item.Cf_keyelse else None,
-        'Php_mode': item.Php_mode if item.Php_mode else None,
-        'Registrar_vendor': item.Registrar_vendor if item.Registrar_vendor else None,
-        'Registrar_username': item.Registrar_username if item.Registrar_usernameelse else None,
-        'Registrar_apLKey': item.Registrar_apLKey if item.Registrar_apLKey else None
     }
 
 

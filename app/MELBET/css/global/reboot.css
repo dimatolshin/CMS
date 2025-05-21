@@ -61,6 +61,9 @@ img {
   margin-bottom: 34px;
   background-color: var(--color-line);
 }
+.boxMargin {
+  margin-bottom: 50px;
+}
 .banner_box {
   border-radius: var(--br-radius);
   max-width: 1200px;

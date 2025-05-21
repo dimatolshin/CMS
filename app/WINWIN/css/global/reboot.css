@@ -34,6 +34,9 @@ main {
   /* transform-origin: top left; */
   /* width: 1200px; */
 }
+.boxMargin {
+  margin-bottom: 50px;
+}
 ul {
   padding: 0;
   list-style: square;
