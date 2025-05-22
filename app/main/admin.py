@@ -15,9 +15,11 @@ admin.site.unregister(User)
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    pass
-    # inlines = [PersonInline]
+    inlines = [PersonInline]
 
+@admin.register(CategoryAccess)
+class CategoryAccessAdmin(admin.ModelAdmin):
+    pass
 
 
 @admin.register(Site)

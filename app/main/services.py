@@ -1,5 +1,7 @@
 from drf_yasg import openapi
 from rest_framework.serializers import Serializer
+from rest_framework_simplejwt.tokens import UntypedToken
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from functools import wraps
 from django.http import JsonResponse
 import requests
@@ -33,16 +35,41 @@ def site_authenticated(view_func):
         site_access = request.COOKIES.get("access_token")
         site_refresh = request.COOKIES.get("refresh_token")
 
+
         if not site_access or not site_refresh:
             return JsonResponse({"detail": "Unauthorized"}, status=401)
 
+
         if not site_access:
             return JsonResponse({"detail": "Need create Acces"}, status=401)
+
+        try:
+            # Декодируем access_token, чтобы получить user_id
+            decoded_token = UntypedToken(site_access)
+            user_id = decoded_token.payload.get("user_id")
+
+            # Добавляем user_id в request для использования в view
+            request.user_id = user_id
+            person = await Person.objects.filter(user__id=user_id).prefetch_related('access').afirst()
+            if not person:
+                return JsonResponse({"error": "Person not found"}, status=404)
+            request.person=person
+            request.access=[i.name async for i in person.access.all()]
+
+        except (InvalidToken, TokenError):
+            return JsonResponse({"detail": "Invalid token"}, status=401)
 
         return await view_func(request, *args, **kwargs)
 
     return _wrapped_view
 
+
+async def custom_access(item):
+    return {
+        'id': item.id,
+        'value': item.name,
+        'content': item.name,
+    }
 
 async def custom_domain_name(item):
     return {

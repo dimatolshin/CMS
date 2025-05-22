@@ -61,14 +61,19 @@ class LoginView(TokenObtainPairView):
 @swagger_auto_schema(
     methods=(['GET']),
     responses={
-        '200': get_response_examples({'Info': 'Good'}),
+        '200': get_response_examples(
+            {'id': 1,
+             'value': 'POKER',
+             'content': 'POKER'}),
     },
     tags=['TEST'],
 )
 @api_view(["GET"])
 @site_authenticated
-async def test_point(request):
-    return JsonResponse({'Info': 'Good'}, status=200)
+async def main_data(request):
+    person = request.person
+    access = [await custom_access(i) async for i in person.access.all()]
+    return JsonResponse(access, safe=False, status=200)
 
 
 @swagger_auto_schema(
@@ -85,8 +90,12 @@ async def test_point(request):
 @api_view(["POST"])
 @site_authenticated
 async def get_shablon_data(request):
+    access = request.access
     shablon_name = request.data.get('shablon_name')
     current_domain = request.data.get('current_domain')
+
+    if shablon_name not in access:
+        return JsonResponse({'Error': 'Недостаточно прав'}, status=404)
 
     if not current_domain:
         site = await Site.objects.filter(shablon_name=shablon_name.upper()).select_related('domain_name',
@@ -94,6 +103,7 @@ async def get_shablon_data(request):
     if current_domain:
         site = await Site.objects.filter(shablon_name=current_domain).select_related('domain_name',
                                                                                      'server').afirst()
+
         if not site:
             site = await Site.objects.filter(shablon_name=shablon_name.upper()).select_related('domain_name',
                                                                                                'server').afirst()
@@ -117,9 +127,14 @@ async def get_shablon_data(request):
 @api_view(["POST"])
 @site_authenticated
 async def change_shablon_data(request):
+    access = request.access
     data = request.data
 
     shablon_name = data.get('shablon_name')
+
+    if shablon_name not in access:
+        return JsonResponse({'Error': 'Недостаточно прав'}, status=404)
+
     site = await Site.objects.filter(shablon_name=shablon_name).afirst()
 
     if not site:
@@ -440,88 +455,55 @@ Sitemap: https://{current_domain_2}/sitemap.xml""")
 @api_view(["GET"])
 @site_authenticated
 async def get_all_domain(request: HttpRequest):
+    access = request.access
     text = request.GET.get("text")
     filter_way = request.GET.get("filter_way")
-    order_by_map = {
+    per_page = int(request.GET.get("per_page", 6))
+    page_number = int(request.GET.get("page", 1))
+
+    STATUS_MAP = {
         "all_domain": "all",
         "active_domain": "Активен",
         "not_active_domain": "Не Активен",
         "block_domain": "Заблокирован",
     }
 
-    order_by = order_by_map.get(filter_way)
-    if not order_by:
+    status_filter = STATUS_MAP.get(filter_way)
+    if not status_filter:
         return JsonResponse({"error": "Invalid filter_way"}, status=400)
 
-    if order_by == 'all':
-        if text:
-            query = [item async for item in
-                     Domain.objects.filter(current_domain__icontains=text).select_related('server',
-                                                                                          'redirect_domain__server').order_by(
-                         'id').all()]
+    domain_query = Domain.objects.filter(domain_mask__in=[a.lower() for a in access]) \
+        .select_related('server', 'redirect_domain__server') \
+        .order_by('id')
 
-            count = len(query)
-        else:
-            query = [item async for item in
-                     Domain.objects.select_related('server',
-                                                   'redirect_domain__server').order_by(
-                         'id').all()]
-            count = len(query)
-    else:
+    if text:
+        domain_query = domain_query.filter(current_domain__icontains=text)
+    if status_filter != 'all':
+        domain_query = domain_query.filter(status=status_filter)
 
-        if text:
-            query = [item async for item in
-                     Domain.objects.filter(current_domain__icontains=text, status=order_by).select_related('server',
-                                                                                                           'redirect_domain__server').order_by(
-                         'id').all()]
-            count = len(query)
-        else:
-            query = [item async for item in
-                     Domain.objects.filter(status=order_by).select_related('server',
-                                                                           'redirect_domain__server').order_by(
-                         'id').all()]
-            count = len(query)
+    all_domain = [await domains(item) async for item in  domain_query.all()]
 
-    all_domain = [await domains(item) for item in query]
-
-    count_domain = len(all_domain)
-    per_page = request.GET.get("per_page", 6)
     paginator = Paginator(all_domain, per_page)
-    page_number = request.GET.get("page", 1)
-    paginated_all_domain = paginator.get_page(page_number)
+    page = paginator.get_page(page_number)
 
-    count_all_domain = len([item async for item in
-                            Domain.objects.select_related('server',
-                                                          'redirect_domain__server').order_by(
-                                'id').all()])
-
-    count_active_domain = len([item async for item in
-                               Domain.objects.filter(status='Активен').select_related('server',
-                                                                                      'redirect_domain__server').order_by(
-                                   'id').all()])
-
-    count_not_active_domain = len([item async for item in
-                                   Domain.objects.filter(status='Не Активен').select_related('server',
-                                                                                             'redirect_domain__server').order_by(
-                                       'id').all()])
-
-    count_block_domain = len([item async for item in
-                              Domain.objects.filter(status='Заблокирован').select_related('server',
-                                                                                          'redirect_domain__server').order_by(
-                                  'id').all()])
-
-    data = {
-        "all_domain": list(paginated_all_domain.object_list),
-        "pages": math.ceil(count_domain / 6),
-        "count_all_domain": count_all_domain,
-        "count_concrete_domain": count,
-        "count_active_domain": count_active_domain,
-        "count_not_active_domain": count_not_active_domain,
-        "count_block_domain": count_block_domain
-
+    counters = {
+        'all': await domain_query.acount(),
+        'active': await domain_query.filter(status='Активен').acount(),
+        'not_active': await domain_query.filter(status='Не Активен').acount(),
+        'blocked': await domain_query.filter(status='Заблокирован').acount()
     }
 
-    return JsonResponse(data, safe=False, status=200)
+    response_data = {
+        "all_domain": list(page.object_list),
+        "pages": paginator.num_pages,
+        "count_all_domain": counters['all'],
+        "count_concrete_domain": len(all_domain),
+        "count_active_domain": counters['active'],
+        "count_not_active_domain": counters['not_active'],
+        "count_block_domain": counters['blocked']
+    }
+
+    return JsonResponse(response_data, safe=False, status=200)
 
 
 @swagger_auto_schema(

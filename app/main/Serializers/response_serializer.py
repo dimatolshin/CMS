@@ -2,6 +2,10 @@ from rest_framework import serializers
 from ..models import *
 
 
+class AccessSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Domain
+        fields = ['id','Username','current_domain','domain_mask','status']
 
 class DomainWithoutServerSerializers(serializers.ModelSerializer):
     class Meta:

@@ -9,19 +9,19 @@ def get_moscow_time():
     return now().astimezone(moscow_tz)
 
 
-# class CategoryAccess(models.Model):
-#     name = models.CharField()
-#
-#     def __str__(self):
-#         return f'id:{self.id}, name:{self.name}'
+class CategoryAccess(models.Model):
+    name = models.CharField()
+
+    def __str__(self):
+        return f'id:{self.id}, name:{self.name}'
 
 
 class Person(models.Model):
     user = models.OneToOneField(User, related_name='person', on_delete=models.CASCADE)
-    # access = models.ManyToManyField(CategoryAccess,related_name='person_access',verbose_name='Доступы')
+    access = models.ManyToManyField(CategoryAccess,related_name='person_access',verbose_name='Доступы',null=True,blank=True)
 
     def __str__(self):
-        return f'user_id:{self.user.id}, user_name:{self.user.name}'
+        return f'user_id:{self.user.id}, user_name:{self.user.username}'
 
 
 class Site(models.Model):
